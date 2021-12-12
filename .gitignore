@@ -1,14 +1,28 @@
-pom.xml
-pom.xml.asc
-*.jar
+#
+# .gitignore
+# =============================================================================
+# Urban bus routing microservice prototype (Clojure port). Version 0.0.1
+# =============================================================================
+# A daemon written in Clojure, designed and intended to be run
+# as a microservice, implementing a simple urban bus routing prototype.
+#
+# This is the configuration of the project Git ignorables,
+# i.e. objects that should not be put into the repository.
+#
+
+# === JVM classes =============================================================
 *.class
-/lib/
-/classes/
-/target/
-/checkouts/
+target/
+
+# === Log files ===============================================================
+log/
+
+# -----------------------------------------------------------------------------
 .lein-deps-sum
 .lein-repl-history
 .lein-plugins/
 .lein-failures
 .nrepl-port
 .cpcache/
+
+# vim:set nu et ts=4 sw=4:
