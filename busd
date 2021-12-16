@@ -11,7 +11,7 @@
 ; (See the LICENSE file at the top of the source tree.)
 ;
 
-(ns busd
+(ns com.transroutownish.proto.bus
     "The startup script of the daemon."
 )
 
