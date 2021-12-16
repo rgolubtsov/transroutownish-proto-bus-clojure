@@ -15,6 +15,13 @@
 
 ## Building
 
+Install the necessary dependencies (`openjdk-11-jre-headless`, `clojure`, `leiningen`, `make`, `docker.io`):
+
+```
+$ sudo apt-get update && \
+  sudo apt-get install openjdk-11-jre-headless clojure leiningen make docker.io -y
+```
+
 (**TBD**)
 
 ## Running
