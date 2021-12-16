@@ -26,6 +26,11 @@ $ sudo apt-get update && \
 
 ## Running
 
+```
+$ ./busd; echo $?
+...
+```
+
 (**TBD**)
 
 ## Operating
