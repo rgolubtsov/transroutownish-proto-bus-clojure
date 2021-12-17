@@ -22,16 +22,42 @@ $ sudo apt-get update && \
   sudo apt-get install openjdk-11-jre-headless clojure leiningen make docker.io -y
 ```
 
+**Build** the microservice using **Leiningen**:
+
+```
+$ lein clean
+$
+$ lein compile
+$
+$ lein test
+...
+$ lein jar
+...
+```
+
+Or **build** the microservice using **GNU Make** (optional, but for convenience &mdash; it covers the same **Leiningen** build workflow under the hood):
+
 (**TBD**)
 
 ## Running
+
+**Run** the microservice using **Leiningen** (generally for development and debugging purposes):
+
+```
+$ lein run; echo $?
+$ #       ^   ^   ^
+$ #       |   |   |
+$ # ------+---+---+
+$ # Whilst this is not necessary, it's beneficial knowing the exit code.
+...
+```
+
+(**TBD**)
 
 ```
 $ ./busd; echo $?
 ...
 ```
-
-(**TBD**)
 
 ## Operating
 
