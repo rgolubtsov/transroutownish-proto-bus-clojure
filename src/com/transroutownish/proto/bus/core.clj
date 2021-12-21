@@ -1,5 +1,5 @@
 ;
-; test/bus/core_test.clj
+; src/com/transroutownish/proto/bus/core.clj
 ; =============================================================================
 ; Urban bus routing microservice prototype (Clojure port). Version 0.0.1
 ; =============================================================================
@@ -11,19 +11,21 @@
 ; (See the LICENSE file at the top of the source tree.)
 ;
 
-(ns bus.core-test
-    "The test module for the daemon."
+(ns com.transroutownish.proto.bus.core
+    "The main module of the daemon."
 
-    (:require
-        [clojure.test :refer :all]
-        [bus.core     :refer :all]
-    )
+    (:gen-class)
 )
 
-(deftest a-test
-    (testing "Dummy for a while... Does nothing."
-        (is (= 1 1))
-    )
+(defn -main
+    "Starts up the daemon.
+
+    Args:
+        args: Arguments...
+    " [& args]
+
+    (println (str "This is a work in progress - "
+                  "please wait for a while..."))
 )
 
 ; vim:set nu et ts=4 sw=4:
