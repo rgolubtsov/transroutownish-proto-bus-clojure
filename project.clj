@@ -19,7 +19,7 @@
         :url  "https://raw.githubusercontent.com/rgolubtsov/transroutownish-proto-bus-clojure/main/LICENSE"
     }
     :dependencies [[org.clojure/clojure "1.10.1"]]
-    :main         ^:skip-aot bus.core
+    :main         com.transroutownish.proto.bus.core
     :target-path  "target/%s"
     :profiles     {:uberjar {:aot :all}}
 )
