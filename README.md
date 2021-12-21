@@ -27,11 +27,11 @@ $ sudo apt-get update && \
 ```
 $ lein clean
 $
-$ lein compile
+$ lein compile :all
 $
 $ lein test
 ...
-$ lein jar
+$ lein uberjar
 ...
 ```
 
@@ -52,10 +52,10 @@ $ # Whilst this is not necessary, it's beneficial knowing the exit code.
 ...
 ```
 
-(**TBD**)
+**Run** the microservice using its all-in-one JAR file, built previously by the `uberjar` target:
 
 ```
-$ ./busd; echo $?
+$ java -jar target/uberjar/bus-0.0.1-standalone.jar; echo $?
 ...
 ```
 
