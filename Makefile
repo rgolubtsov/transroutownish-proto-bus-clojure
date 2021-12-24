@@ -12,19 +12,31 @@
 #
 
 SERV = target
+TEST = test
+JAR  = jar
 
 # Specify flags and other vars here.
+LEIN = lein
 ECHO = @echo
 
 # Making the first target (the microservice itself).
 $(SERV):
+	$(LEIN) compile :all
+
+# Making the second target (tests).
+$(TEST):
+	$(LEIN) $(TEST)
+
+# Making the third target (runnable JAR file).
+$(JAR):
+	$(LEIN) uberjar
 	$(ECHO)
 
 .PHONY: all clean
 
-all: $(SERV)
+all: $(JAR)
 
 clean:
-	$(ECHO)
+	$(LEIN) clean
 
 # vim:set nu ts=4 sw=4:
