@@ -28,8 +28,8 @@ $ sudo apt-get update && \
 $ lein clean
 $
 $ lein compile :all
-$
-$ lein test
+...
+$ lein test  # <== Optional. This currently does nothing.
 ...
 $ lein uberjar
 ...
@@ -37,7 +37,18 @@ $ lein uberjar
 
 Or **build** the microservice using **GNU Make** (optional, but for convenience &mdash; it covers the same **Leiningen** build workflow under the hood):
 
-(**TBD**)
+```
+$ make clean
+...
+$ make      # <== Compilation phase. (But produced classes might be overwritten by the jar target.)
+...
+$ make test
+...
+$ make jar
+...
+$ make all  # <== This is equivalent to the jar target.
+...
+```
 
 ## Running
 
