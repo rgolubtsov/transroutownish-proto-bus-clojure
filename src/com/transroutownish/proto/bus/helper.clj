@@ -35,4 +35,15 @@
           (str "Request parameters must take positive integer values, "
                "in the range 1 .. 2,147,483,647. Please check your inputs."))
 
+;; The application properties filename.
+(defmacro APP_PROPS [] "application.properties")
+
+; Application properties keys for the logger.
+(defmacro DEBUG_LOG_ENABLED [] "logger.debug.enabled")
+
+; Application properties keys for the routes data store.
+(defmacro PATH_PREFIX [] "routes.datastore.path.prefix")
+(defmacro PATH_DIR    [] "routes.datastore.path.dir"   )
+(defmacro FILENAME    [] "routes.datastore.filename"   )
+
 ; vim:set nu et ts=4 sw=4:
