@@ -30,17 +30,17 @@
     " [& args]
 
     ;; The path and filename of the sample routes data store.
-    (defmacro SAMPLE_ROUTES [] "./data/routes.txt")
+    (defmacro SAMPLE-ROUTES [] "./data/routes.txt")
 
     ;; The regex pattern for the element to be excluded
     ;; from a bus stops sequence: it is an arbitrary identifier
     ;; of a route, which is not used in the routes processing anyhow.
-    (defmacro ROUTE_ID_REGEX [] #"^\d+")
+    (defmacro ROUTE-ID-REGEX [] #"^\d+")
 
-    (io/resource (AUX/APP_PROPS))
+    (let [data (slurp (io/resource (AUX/APP-PROPS)))]
 
     (println (str "This is a work in progress - "
-                  "please wait for a while..."))
+                  "please wait for a while..." (AUX/NEW-LINE) data)))
 )
 
 ; vim:set nu et ts=4 sw=4:
