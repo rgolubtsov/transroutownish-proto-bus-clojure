@@ -35,7 +35,7 @@
     ;; The regex pattern for the element to be excluded
     ;; from a bus stops sequence: it is an arbitrary identifier
     ;; of a route, which is not used in the routes processing anyhow.
-    (defmacro ROUTE_ID_REGEX [] "^\\d+")
+    (defmacro ROUTE_ID_REGEX [] #"^\d+")
 
     (io/resource (AUX/APP_PROPS))
 
