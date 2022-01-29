@@ -16,34 +16,35 @@
 )
 
 ; Helper constants.
-(defmacro EMPTY_STRING []   "")
+(defmacro EMPTY-STRING []   "")
 (defmacro SLASH        []  "/")
 (defmacro EQUALS       []  "=")
 (defmacro BRACES       [] "{}")
 (defmacro SPACE        []  " ")
-(defmacro V_BAR        []  "|")
+(defmacro V-BAR        []  "|")
+(defmacro NEW-LINE     [] "\n")
 
 ; Extra helper constants.
 (defmacro YES [] "yes")
 
 ; Common error messages.
-(defmacro ERR_APP_PROPS_UNABLE_TO_GET          []
+(defmacro ERR-APP-PROPS-UNABLE-TO-GET          []
           "Unable to get application properties.")
-(defmacro ERR_DATASTORE_NOT_FOUND              []
+(defmacro ERR-DATASTORE-NOT-FOUND              []
           "FATAL: Data store file not found. Quitting...")
-(defmacro ERR_REQ_PARAMS_MUST_BE_POSITIVE_INTS []
+(defmacro ERR-REQ-PARAMS-MUST-BE-POSITIVE-INTS []
           (str "Request parameters must take positive integer values, "
                "in the range 1 .. 2,147,483,647. Please check your inputs."))
 
 ;; The application properties filename.
-(defmacro APP_PROPS [] "application.properties")
+(defmacro APP-PROPS [] "application.properties")
 
 ; Application properties keys for the logger.
-(defmacro DEBUG_LOG_ENABLED [] "logger.debug.enabled")
+(defmacro DEBUG-LOG-ENABLED [] "logger.debug.enabled")
 
 ; Application properties keys for the routes data store.
-(defmacro PATH_PREFIX [] "routes.datastore.path.prefix")
-(defmacro PATH_DIR    [] "routes.datastore.path.dir"   )
+(defmacro PATH-PREFIX [] "routes.datastore.path.prefix")
+(defmacro PATH-DIR    [] "routes.datastore.path.dir"   )
 (defmacro FILENAME    [] "routes.datastore.filename"   )
 
 ; vim:set nu et ts=4 sw=4:
