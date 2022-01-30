@@ -1,0 +1,23 @@
+;
+; resources/settings.edn
+; =============================================================================
+; Urban bus routing microservice prototype (Clojure port). Version 0.0.1
+; =============================================================================
+; A daemon written in Clojure, designed and intended to be run
+; as a microservice, implementing a simple urban bus routing prototype.
+; =============================================================================
+; Copyright (C) 2021-2022 Radislav (Radicchio) Golubtsov
+;
+; (See the LICENSE file at the top of the source tree.)
+;
+
+[{:server-port 8765}
+
+; Uncomment this setting to enable debug logging.
+;{:logger-debug-enabled "yes"}
+
+{:routes-datastore-path-prefix "./"        }
+{:routes-datastore-path-dir    "data/"     }
+{:routes-datastore-filename    "routes.txt"}]
+
+; vim:set nu et ts=4 sw=4:
