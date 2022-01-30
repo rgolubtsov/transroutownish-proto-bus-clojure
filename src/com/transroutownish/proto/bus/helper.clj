@@ -28,8 +28,6 @@
 (defmacro YES [] "yes")
 
 ; Common error messages.
-(defmacro ERR-APP-PROPS-UNABLE-TO-GET          []
-          "Unable to get application properties.")
 (defmacro ERR-DATASTORE-NOT-FOUND              []
           "FATAL: Data store file not found. Quitting...")
 (defmacro ERR-REQ-PARAMS-MUST-BE-POSITIVE-INTS []
@@ -37,14 +35,6 @@
                "in the range 1 .. 2,147,483,647. Please check your inputs."))
 
 ;; The application properties filename.
-(defmacro APP-PROPS [] "application.properties")
-
-; Application properties keys for the logger.
-(defmacro DEBUG-LOG-ENABLED [] "logger.debug.enabled")
-
-; Application properties keys for the routes data store.
-(defmacro PATH-PREFIX [] "routes.datastore.path.prefix")
-(defmacro PATH-DIR    [] "routes.datastore.path.dir"   )
-(defmacro FILENAME    [] "routes.datastore.filename"   )
+(defmacro APP-PROPS [] "settings.edn")
 
 ; vim:set nu et ts=4 sw=4:
