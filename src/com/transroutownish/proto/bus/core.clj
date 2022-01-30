@@ -17,9 +17,11 @@
     (:gen-class)
 
     (:require
-        [com.transroutownish.proto.bus.helper :as AUX]
-        [clojure.java.io                      :as io ]
+        [clojure.java.io :as io ]
+        [clojure.edn     :as edn]
     )
+
+    (:require [com.transroutownish.proto.bus.helper :as AUX])
 )
 
 (defn -main
@@ -37,10 +39,28 @@
     ;; of a route, which is not used in the routes processing anyhow.
     (defmacro ROUTE-ID-REGEX [] #"^\d+")
 
-    (let [data (slurp (io/resource (AUX/APP-PROPS)))]
+    (let [settings (edn/read-string (slurp (io/resource (AUX/APP-PROPS))))]
 
+    (let [server-port                  (get (nth settings 0) :server-port                 )]
+    (let [routes-datastore-path-prefix (get (nth settings 1) :routes-datastore-path-prefix)]
+    (let [routes-datastore-path-dir    (get (nth settings 2) :routes-datastore-path-dir   )]
+    (let [routes-datastore-filename    (get (nth settings 3) :routes-datastore-filename   )]
+
+    ; -------------------------------------------------------------------------
+    ; --- Debug output - Begin ------------------------------------------------
+    ; -------------------------------------------------------------------------
     (println (str "This is a work in progress - "
-                  "please wait for a while..." (AUX/NEW-LINE) data)))
+                  "please wait for a while..."))
+
+    (println (str server-port                  (AUX/NEW-LINE)
+                  routes-datastore-path-prefix (AUX/NEW-LINE)
+                  routes-datastore-path-dir    (AUX/NEW-LINE)
+                  routes-datastore-filename))
+    ; -------------------------------------------------------------------------
+    ; --- Debug output - End --------------------------------------------------
+    ; -------------------------------------------------------------------------
+
+    )))))
 )
 
 ; vim:set nu et ts=4 sw=4:
