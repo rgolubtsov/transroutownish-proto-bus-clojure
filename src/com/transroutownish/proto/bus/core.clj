@@ -39,7 +39,7 @@
     ;; of a route, which is not used in the routes processing anyhow.
     (defmacro ROUTE-ID-REGEX [] #"^\d+")
 
-    (let [settings (edn/read-string (slurp (io/resource (AUX/APP-PROPS))))]
+    (let [settings (edn/read-string (slurp (io/resource (AUX/SETTINGS))))]
 
     (let [server-port                  (get (nth settings 0) :server-port                 )]
     (let [routes-datastore-path-prefix (get (nth settings 1) :routes-datastore-path-prefix)]

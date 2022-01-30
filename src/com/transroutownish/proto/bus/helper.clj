@@ -34,7 +34,7 @@
           (str "Request parameters must take positive integer values, "
                "in the range 1 .. 2,147,483,647. Please check your inputs."))
 
-;; The application properties filename.
-(defmacro APP-PROPS [] "settings.edn")
+;; The daemon settings filename.
+(defmacro SETTINGS [] "settings.edn")
 
 ; vim:set nu et ts=4 sw=4:
