@@ -41,10 +41,10 @@
 
     (let [settings (edn/read-string (slurp (io/resource (AUX/SETTINGS))))]
 
-    (let [server-port                  (get (nth settings 0) :server-port                 )]
-    (let [routes-datastore-path-prefix (get (nth settings 1) :routes-datastore-path-prefix)]
-    (let [routes-datastore-path-dir    (get (nth settings 2) :routes-datastore-path-dir   )]
-    (let [routes-datastore-filename    (get (nth settings 3) :routes-datastore-filename   )]
+    (let [server-port                  (some :server-port                  settings)]
+    (let [routes-datastore-path-prefix (some :routes-datastore-path-prefix settings)]
+    (let [routes-datastore-path-dir    (some :routes-datastore-path-dir    settings)]
+    (let [routes-datastore-filename    (some :routes-datastore-filename    settings)]
 
     ; -------------------------------------------------------------------------
     ; --- Debug output - Begin ------------------------------------------------
