@@ -16,11 +16,6 @@
 
     (:gen-class)
 
-    (:require
-        [clojure.java.io :as io ]
-        [clojure.edn     :as edn]
-    )
-
     (:require [com.transroutownish.proto.bus.helper :as AUX])
 )
 
@@ -39,28 +34,21 @@
     ;; of a route, which is not used in the routes processing anyhow.
     (defmacro ROUTE-ID-REGEX [] #"^\d+")
 
-    (let [settings (edn/read-string (slurp (io/resource (AUX/SETTINGS))))]
-
-    (let [server-port                  (some :server-port                  settings)]
-    (let [routes-datastore-path-prefix (some :routes-datastore-path-prefix settings)]
-    (let [routes-datastore-path-dir    (some :routes-datastore-path-dir    settings)]
-    (let [routes-datastore-filename    (some :routes-datastore-filename    settings)]
-
     ; -------------------------------------------------------------------------
     ; --- Debug output - Begin ------------------------------------------------
     ; -------------------------------------------------------------------------
     (println (str "This is a work in progress - "
                   "please wait for a while..."))
-
-    (println (str server-port                  (AUX/NEW-LINE)
-                  routes-datastore-path-prefix (AUX/NEW-LINE)
-                  routes-datastore-path-dir    (AUX/NEW-LINE)
-                  routes-datastore-filename))
     ; -------------------------------------------------------------------------
     ; --- Debug output - End --------------------------------------------------
     ; -------------------------------------------------------------------------
 
-    )))))
+    ; Getting the path and filename of the routes data store
+    ; from daemon settings.
+    (let [datastore0 (AUX/get-routes-datastore)]
+    (let [datastore  (if (nil? datastore0) (SAMPLE-ROUTES) datastore0)]
+    ; TODO: Use <datastore> here.
+    ))
 )
 
 ; vim:set nu et ts=4 sw=4:
