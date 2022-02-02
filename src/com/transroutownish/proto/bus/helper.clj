@@ -58,17 +58,6 @@
     (let [routes-datastore-path-dir    (some :routes-datastore-path-dir    settings)]
     (let [routes-datastore-filename    (some :routes-datastore-filename    settings)]
 
-    ; -------------------------------------------------------------------------
-    ; --- Debug output - Begin ------------------------------------------------
-    ; -------------------------------------------------------------------------
-    (println (str server-port                  (NEW-LINE)
-                  routes-datastore-path-prefix (NEW-LINE)
-                  routes-datastore-path-dir    (NEW-LINE)
-                  routes-datastore-filename))
-    ; -------------------------------------------------------------------------
-    ; --- Debug output - End --------------------------------------------------
-    ; -------------------------------------------------------------------------
-
     (let [datastore0 (if (nil? routes-datastore-path-prefix) (EMPTY-STRING)
                                routes-datastore-path-prefix)]
     (let [datastore1 (if (nil? routes-datastore-path-dir   ) (EMPTY-STRING)
