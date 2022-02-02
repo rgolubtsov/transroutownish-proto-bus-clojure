@@ -16,6 +16,12 @@
 
     (:gen-class)
 
+    (:require
+        [clojure.java.io :as io]
+    )
+
+    (:import [java.util Scanner])
+
     (:require [com.transroutownish.proto.bus.helper :as AUX])
 )
 
@@ -47,8 +53,17 @@
     ; from daemon settings.
     (let [datastore0 (AUX/get-routes-datastore)]
     (let [datastore  (if (nil? datastore0) (SAMPLE-ROUTES) datastore0)]
-    ; TODO: Use <datastore> here.
-    ))
+
+    (let [data (io/file datastore)]
+
+    (let [routes (Scanner. data)]
+
+    (while (.hasNextLine routes)
+        (println (.nextLine routes))
+    )
+
+    (.close routes)
+    ))))
 )
 
 ; vim:set nu et ts=4 sw=4:
