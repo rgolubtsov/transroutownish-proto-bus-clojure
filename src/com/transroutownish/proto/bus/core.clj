@@ -38,7 +38,7 @@
     ;; The regex pattern for the element to be excluded
     ;; from a bus stops sequence: it is an arbitrary identifier
     ;; of a route, which is not used in the routes processing anyhow.
-    (defmacro ROUTE-ID-REGEX [] #"^\d+")
+    (defmacro ROUTE-ID-REGEX [] "^\\d+")
 
     ; -------------------------------------------------------------------------
     ; --- Debug output - Begin ------------------------------------------------
@@ -52,14 +52,16 @@
     ; Getting the path and filename of the routes data store
     ; from daemon settings.
     (let [datastore0 (AUX/get-routes-datastore)]
-    (let [datastore  (if (nil? datastore0) (SAMPLE-ROUTES) datastore0)]
+    (let [datastore  (if (nil? datastore0) (macroexpand `(SAMPLE-ROUTES))
+                               datastore0)]
 
     (let [data (io/file datastore)]
 
     (let [routes (Scanner. data)]
 
     (while (.hasNextLine routes)
-        (println (.nextLine routes))
+        (println (str (.replaceFirst (.nextLine routes)
+            (macroexpand `(ROUTE-ID-REGEX)) (AUX/EMPTY-STRING)) (AUX/SPACE)))
     )
 
     (.close routes)
