@@ -55,7 +55,6 @@
     " [settings]
 
 ;   (let [server-port                  (some :server-port                  settings)]
-;   (let [logger-debug-enabled         (some :logger-debug-enabled         settings)]
     (let [routes-datastore-path-prefix (some :routes-datastore-path-prefix settings)]
     (let [routes-datastore-path-dir    (some :routes-datastore-path-dir    settings)]
     (let [routes-datastore-filename    (some :routes-datastore-filename    settings)]
@@ -68,7 +67,24 @@
                                routes-datastore-filename   )]
     (let [datastore  (str  datastore0 datastore1 datastore2)]
         (if (= datastore (EMPTY-STRING)) nil datastore) ; <== Return value.
-    )))))));))
+    )))))));)
+)
+
+(defn is-debug-log-enabled
+    "Identifies whether debug logging is enabled by retrieving
+    the corresponding value from daemon settings.
+
+    Args:
+        The vector containing maps of individual settings.
+
+    Returns:
+        true if debug logging is enabled, false otherwise.
+    " [settings]
+
+    (let [logger-debug-enabled (some :logger-debug-enabled settings)]
+
+    (and (not (nil?    logger-debug-enabled))
+         (=   (compare logger-debug-enabled (YES)) 0)))
 )
 
 (defn -get-settings
