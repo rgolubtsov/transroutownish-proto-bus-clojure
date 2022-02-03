@@ -46,14 +46,16 @@
     "Retrieves the path and filename of the routes data store
     from daemon settings.
 
+    Args:
+        The vector containing maps of individual settings.
+
     Returns:
         The path and filename of the routes data store
         or nil, if they are not defined.
-    " []
+    " [settings]
 
-    (let [settings (edn/read-string (slurp (io/resource (SETTINGS))))]
-
-    (let [server-port                  (some :server-port                  settings)]
+;   (let [server-port                  (some :server-port                  settings)]
+;   (let [logger-debug-enabled         (some :logger-debug-enabled         settings)]
     (let [routes-datastore-path-prefix (some :routes-datastore-path-prefix settings)]
     (let [routes-datastore-path-dir    (some :routes-datastore-path-dir    settings)]
     (let [routes-datastore-filename    (some :routes-datastore-filename    settings)]
@@ -66,7 +68,17 @@
                                routes-datastore-filename   )]
     (let [datastore  (str  datastore0 datastore1 datastore2)]
         (if (= datastore (EMPTY-STRING)) nil datastore) ; <== Return value.
-    )))))))))
+    )))))));))
+)
+
+(defn -get-settings
+    "Helper function. Used to get the daemon settings.
+
+    Returns:
+        A vector containing maps of individual settings.
+    " []
+
+    (edn/read-string (slurp (io/resource (SETTINGS))))
 )
 
 ; vim:set nu et ts=4 sw=4:
