@@ -49,23 +49,30 @@
     ; --- Debug output - End --------------------------------------------------
     ; -------------------------------------------------------------------------
 
+    ; Getting the daemon settings.
+    (let [settings (AUX/-get-settings)]
+
     ; Getting the path and filename of the routes data store
     ; from daemon settings.
-    (let [datastore0 (AUX/get-routes-datastore)]
+    (let [datastore0 (AUX/get-routes-datastore settings)]
     (let [datastore  (if (nil? datastore0) (macroexpand `(SAMPLE-ROUTES))
                                datastore0)]
 
-    (let [data (io/file datastore)]
+    (try
+        (let [data (io/file datastore)]
 
-    (let [routes (Scanner. data)]
+        (let [routes (Scanner. data)]
 
-    (while (.hasNextLine routes)
-        (println (str (.replaceFirst (.nextLine routes)
-            (macroexpand `(ROUTE-ID-REGEX)) (AUX/EMPTY-STRING)) (AUX/SPACE)))
-    )
+        (while (.hasNextLine routes)
+            (println (str (.replaceFirst (.nextLine routes)
+                (macroexpand `(ROUTE-ID-REGEX)) (AUX/EMPTY-STRING)) (AUX/SPACE)))
+        )
 
-    (.close routes)
-    ))))
+        (.close routes)
+        ))
+    (catch java.io.FileNotFoundException e
+        (println (AUX/ERR-DATASTORE-NOT-FOUND))
+    )))))
 )
 
 ; vim:set nu et ts=4 sw=4:
