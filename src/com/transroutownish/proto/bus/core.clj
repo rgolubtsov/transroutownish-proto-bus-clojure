@@ -70,8 +70,12 @@
         (.close routes)
         ))
     (catch java.io.FileNotFoundException e
-        (println (AUX/ERR-DATASTORE-NOT-FOUND))
-    )))))
+        (binding [*out* *err*] (println (AUX/ERR-DATASTORE-NOT-FOUND)))
+    ))))
+
+    ; Identifying whether debug logging is enabled.
+    (let [debug-log-enabled (AUX/is-debug-log-enabled settings)])
+    )
 )
 
 ; vim:set nu et ts=4 sw=4:
