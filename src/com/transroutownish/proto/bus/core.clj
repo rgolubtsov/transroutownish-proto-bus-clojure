@@ -25,20 +25,20 @@
     (:require [com.transroutownish.proto.bus.helper :as AUX])
 )
 
+;; The path and filename of the sample routes data store.
+(defmacro SAMPLE-ROUTES [] "./data/routes.txt")
+
+;; The regex pattern for the element to be excluded
+;; from a bus stops sequence: it is an arbitrary identifier
+;; of a route, which is not used in the routes processing anyhow.
+(defmacro ROUTE-ID-REGEX [] "^\\d+")
+
 (defn -main
     "The microservice entry point.
 
     Args:
         args: A list of command-line arguments.
     " [& args]
-
-    ;; The path and filename of the sample routes data store.
-    (defmacro SAMPLE-ROUTES [] "./data/routes.txt")
-
-    ;; The regex pattern for the element to be excluded
-    ;; from a bus stops sequence: it is an arbitrary identifier
-    ;; of a route, which is not used in the routes processing anyhow.
-    (defmacro ROUTE-ID-REGEX [] "^\\d+")
 
     ; -------------------------------------------------------------------------
     ; --- Debug output - Begin ------------------------------------------------
@@ -55,8 +55,7 @@
     ; Getting the path and filename of the routes data store
     ; from daemon settings.
     (let [datastore0 (AUX/get-routes-datastore settings)]
-    (let [datastore  (if (nil? datastore0) (macroexpand `(SAMPLE-ROUTES))
-                               datastore0)]
+    (let [datastore  (if (nil? datastore0) (SAMPLE-ROUTES) datastore0)]
 
     (try
         (let [data (io/file datastore)]
@@ -65,7 +64,7 @@
 
         (while (.hasNextLine routes)
             (println (str (.replaceFirst (.nextLine routes)
-                (macroexpand `(ROUTE-ID-REGEX)) (AUX/EMPTY-STRING)) (AUX/SPACE)))
+                (ROUTE-ID-REGEX) (AUX/EMPTY-STRING)) (AUX/SPACE)))
         )
 
         (.close routes)
