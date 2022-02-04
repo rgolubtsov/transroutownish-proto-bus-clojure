@@ -21,6 +21,8 @@
 )
 
 ; Helper constants.
+(defmacro EXIT-FAILURE []    1) ;    Failing exit status.
+(defmacro EXIT-SUCCESS []    0) ; Successful exit status.
 (defmacro EMPTY-STRING []   "")
 (defmacro SLASH        []  "/")
 (defmacro EQUALS       []  "=")
@@ -33,14 +35,56 @@
 (defmacro YES [] "yes")
 
 ; Common error messages.
+(defmacro ERR-PORT-VALID-MUST-BE-POSITIVE-INT  []
+          (str "Warning: Valid server port must be a positive integer value, "
+               "in the range 1024 .. 49151. The default value of 8080 "
+               "will be used instead."))
 (defmacro ERR-DATASTORE-NOT-FOUND              []
           "FATAL: Data store file not found. Quitting...")
 (defmacro ERR-REQ-PARAMS-MUST-BE-POSITIVE-INTS []
           (str "Request parameters must take positive integer values, "
                "in the range 1 .. 2,147,483,647. Please check your inputs."))
 
+;; The minimum port number allowed.
+(defmacro MIN-PORT []  1024)
+
+;; The maximum port number allowed.
+(defmacro MAX-PORT [] 49151)
+
+;; The default server port number.
+(defmacro DEF-PORT []  8080)
+
 ;; The daemon settings filename.
 (defmacro SETTINGS [] "settings.edn")
+
+(defn get-server-port
+    "Retrieves the port number used to run the server, from daemon settings.
+
+    Args:
+        The vector containing maps of individual settings.
+
+    Returns:
+        The port number on which the server has to be run.
+    " [settings]
+
+    (let [server-port (some :server-port settings)]
+
+    (if (not (nil? server-port))
+        (cond
+            (and (>= server-port (MIN-PORT)) (<= server-port (MAX-PORT)))
+                (list server-port)
+            :else
+                (do (binding [*out* *err*]
+                    (println (ERR-PORT-VALID-MUST-BE-POSITIVE-INT)))
+
+                (list (DEF-PORT)))
+        )
+        (do (binding [*out* *err*]
+            (println (ERR-PORT-VALID-MUST-BE-POSITIVE-INT)))
+
+        (list (DEF-PORT)))
+    ))
+)
 
 (defn get-routes-datastore
     "Retrieves the path and filename of the routes data store
@@ -54,7 +98,6 @@
         or nil, if they are not defined.
     " [settings]
 
-;   (let [server-port                  (some :server-port                  settings)]
     (let [routes-datastore-path-prefix (some :routes-datastore-path-prefix settings)]
     (let [routes-datastore-path-dir    (some :routes-datastore-path-dir    settings)]
     (let [routes-datastore-filename    (some :routes-datastore-filename    settings)]
@@ -67,7 +110,7 @@
                                routes-datastore-filename   )]
     (let [datastore  (str  datastore0 datastore1 datastore2)]
         (if (= datastore (EMPTY-STRING)) nil datastore) ; <== Return value.
-    )))))));)
+    )))))))
 )
 
 (defn is-debug-log-enabled
