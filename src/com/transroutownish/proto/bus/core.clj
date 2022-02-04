@@ -52,6 +52,13 @@
     ; Getting the daemon settings.
     (let [settings (AUX/-get-settings)]
 
+    ; Getting the port number used to run the server,
+    ; from daemon settings.
+    (let [server-port (AUX/get-server-port settings)]
+
+    (println server-port)
+    )
+
     ; Getting the path and filename of the routes data store
     ; from daemon settings.
     (let [datastore0 (AUX/get-routes-datastore settings)]
@@ -71,11 +78,15 @@
         ))
     (catch java.io.FileNotFoundException e
         (binding [*out* *err*] (println (AUX/ERR-DATASTORE-NOT-FOUND)))
+
+        (System/exit (AUX/EXIT-FAILURE))
     ))))
 
     ; Identifying whether debug logging is enabled.
-    (let [debug-log-enabled (AUX/is-debug-log-enabled settings)])
-    )
+    (let [debug-log-enabled (AUX/is-debug-log-enabled settings)]
+
+    (println debug-log-enabled)
+    ))
 )
 
 ; vim:set nu et ts=4 sw=4:
