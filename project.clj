@@ -26,6 +26,7 @@
     :main         com.transroutownish.proto.bus.core
     :target-path  "target/%s"
     :profiles     {:uberjar {:aot :all}}
+    :jvm-opts     ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/slf4j-factory"]
 )
 
 ; vim:set nu et ts=4 sw=4:
