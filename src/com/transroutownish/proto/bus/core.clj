@@ -38,7 +38,7 @@
 
     Args:
         args: A list of command-line arguments.
-    " [& args]
+    " {:added "0.0.1", :static true} [& args]
 
     ; -------------------------------------------------------------------------
     ; --- Debug output - Begin ------------------------------------------------
