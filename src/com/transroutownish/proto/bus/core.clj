@@ -17,7 +17,8 @@
     (:gen-class)
 
     (:require
-        [clojure.java.io :as io]
+        [clojure.tools.logging :as log]
+        [clojure.java.io       :as io ]
     )
 
     (:import [java.util Scanner])
@@ -43,8 +44,7 @@
     ; -------------------------------------------------------------------------
     ; --- Debug output - Begin ------------------------------------------------
     ; -------------------------------------------------------------------------
-    (println (str "This is a work in progress - "
-                  "please wait for a while..."))
+    (log/info "This is a work in progress - please wait for a while...")
     ; -------------------------------------------------------------------------
     ; --- Debug output - End --------------------------------------------------
     ; -------------------------------------------------------------------------
@@ -56,7 +56,7 @@
     ; from daemon settings.
     (let [server-port (AUX/get-server-port settings)]
 
-    (println server-port)
+    (log/debug server-port)
     )
 
     ; Getting the path and filename of the routes data store
@@ -77,7 +77,7 @@
         (.close routes)
         ))
     (catch java.io.FileNotFoundException e
-        (binding [*out* *err*] (println (AUX/ERR-DATASTORE-NOT-FOUND)))
+        (log/fatal (AUX/ERR-DATASTORE-NOT-FOUND))
 
         (System/exit (AUX/EXIT-FAILURE))
     ))))
@@ -85,7 +85,7 @@
     ; Identifying whether debug logging is enabled.
     (let [debug-log-enabled (AUX/is-debug-log-enabled settings)]
 
-    (println debug-log-enabled)
+    (log/debug debug-log-enabled)
     ))
 )
 
