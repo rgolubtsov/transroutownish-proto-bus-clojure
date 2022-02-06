@@ -18,10 +18,15 @@
         :name "MIT License"
         :url  "https://raw.githubusercontent.com/rgolubtsov/transroutownish-proto-bus-clojure/main/LICENSE"
     }
-    :dependencies [[org.clojure/clojure "1.10.1"]]
+    :dependencies [
+        [org.clojure/clojure       "1.10.3"]
+        [org.clojure/tools.logging "1.2.4" ]
+        [org.slf4j/slf4j-reload4j  "1.7.35"]
+    ]
     :main         com.transroutownish.proto.bus.core
     :target-path  "target/%s"
     :profiles     {:uberjar {:aot :all}}
+    :jvm-opts     ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/slf4j-factory"]
 )
 
 ; vim:set nu et ts=4 sw=4:

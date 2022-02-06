@@ -15,8 +15,9 @@
     "The helper module for the daemon."
 
     (:require
-        [clojure.java.io :as io ]
-        [clojure.edn     :as edn]
+        [clojure.tools.logging :as log]
+        [clojure.java.io       :as io ]
+        [clojure.edn           :as edn]
     )
 )
 
@@ -36,7 +37,7 @@
 
 ; Common error messages.
 (defmacro ERR-PORT-VALID-MUST-BE-POSITIVE-INT  []
-          (str "Warning: Valid server port must be a positive integer value, "
+          (str "Valid server port must be a positive integer value, "
                "in the range 1024 .. 49151. The default value of 8080 "
                "will be used instead."))
 (defmacro ERR-DATASTORE-NOT-FOUND              []
@@ -74,13 +75,11 @@
             (and (>= server-port (MIN-PORT)) (<= server-port (MAX-PORT)))
                 (list server-port)
             :else
-                (do (binding [*out* *err*]
-                    (println (ERR-PORT-VALID-MUST-BE-POSITIVE-INT)))
+                (do (log/warn (ERR-PORT-VALID-MUST-BE-POSITIVE-INT))
 
                 (list (DEF-PORT)))
         )
-        (do (binding [*out* *err*]
-            (println (ERR-PORT-VALID-MUST-BE-POSITIVE-INT)))
+        (do (log/warn (ERR-PORT-VALID-MUST-BE-POSITIVE-INT))
 
         (list (DEF-PORT)))
     ))
