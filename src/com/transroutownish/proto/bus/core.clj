@@ -19,6 +19,9 @@
     (:require
         [clojure.tools.logging :as log]
         [clojure.java.io       :as io ]
+        [org.httpkit.server    :refer [
+            run-server
+        ]]
     )
 
     (:import [java.util Scanner])
@@ -33,6 +36,8 @@
 ;; from a bus stops sequence: it is an arbitrary identifier
 ;; of a route, which is not used in the routes processing anyhow.
 (defmacro ROUTE-ID-REGEX [] "^\\d+")
+
+(defn reqhandler [req])
 
 (defn -main
     "The microservice entry point.
@@ -57,7 +62,6 @@
     (let [server-port (AUX/get-server-port settings)]
 
     (log/debug server-port)
-    )
 
     ; Getting the path and filename of the routes data store
     ; from daemon settings.
@@ -80,13 +84,15 @@
         (log/fatal (AUX/ERR-DATASTORE-NOT-FOUND))
 
         (System/exit (AUX/EXIT-FAILURE))
-    ))))
+    ))
 
     ; Identifying whether debug logging is enabled.
     (let [debug-log-enabled (AUX/is-debug-log-enabled settings)]
 
     (log/debug debug-log-enabled)
-    ))
+
+    (run-server reqhandler {:port (nth server-port 0)})
+    )))))
 )
 
 ; vim:set nu et ts=4 sw=4:
