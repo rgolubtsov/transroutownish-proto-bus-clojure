@@ -15,7 +15,7 @@
 
 ## Building
 
-Install the necessary dependencies (`openjdk-11-jre-headless`, `clojure`, `leiningen`, `make`, `docker.io`):
+The microservice is known to be built and run successfully under **Ubuntu Server (Ubuntu 20.04.3 LTS x86-64)**. Install the necessary dependencies (`openjdk-11-jre-headless`, `clojure`, `leiningen`, `make`, `docker.io`):
 
 ```
 $ sudo apt-get update && \
@@ -40,7 +40,7 @@ Or **build** the microservice using **GNU Make** (optional, but for convenience 
 ```
 $ make clean
 ...
-$ make      # <== Compilation phase. (But produced classes might be overwritten by the jar target.)
+$ make      # <== Compilation phase. (Be aware: classes produced might be overwritten by the jar target.)
 ...
 $ make test
 ...
