@@ -59,8 +59,6 @@
     ; from daemon settings.
     (let [server-port (AUX/get-server-port settings)]
 
-    (log/debug server-port)
-
     ; Getting the path and filename of the routes data store
     ; from daemon settings.
     (let [datastore0 (AUX/get-routes-datastore settings)]
@@ -72,7 +70,7 @@
         (let [routes (Scanner. data)]
 
         (while (.hasNextLine routes)
-            (println (str (.replaceFirst (.nextLine routes)
+            (log/debug (str (.replaceFirst (.nextLine routes)
                 (ROUTE-ID-REGEX) (AUX/EMPTY-STRING)) (AUX/SPACE)))
         )
 
@@ -86,8 +84,6 @@
 
     ; Identifying whether debug logging is enabled.
     (let [debug-log-enabled (AUX/is-debug-log-enabled settings)]
-
-    (log/debug debug-log-enabled)
 
     ; Starting up the daemon.
     (CTRL/startup (list

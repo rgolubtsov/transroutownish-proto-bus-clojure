@@ -15,7 +15,10 @@
     "The controller module of the daemon."
 
     (:require
-        [org.httpkit.server :refer [run-server]]
+        [clojure.tools.logging :as log]
+        [org.httpkit.server    :refer [
+            run-server
+        ]]
     )
 )
 
@@ -42,10 +45,14 @@
         The exit code indicating the daemon overall termination status.
     " {:added "0.0.1", :static true} [args]
 
-    (let [server-port (nth args 0)]
+    (let [server-port       (nth args 0)]
+    (let [debug-log-enabled (nth args 1)]
+
+    (log/debug "HTTP Kit server port number:" server-port)
+    (log/debug "Debug log enabled:" debug-log-enabled)
 
     (run-server reqhandler {:port server-port})
-    )
+    ))
 )
 
 ; vim:set nu et ts=4 sw=4:
