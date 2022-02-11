@@ -19,14 +19,14 @@
     (:require
         [clojure.tools.logging :as log]
         [clojure.java.io       :as io ]
-        [org.httpkit.server    :refer [
-            run-server
-        ]]
     )
 
     (:import [java.util Scanner])
 
-    (:require [com.transroutownish.proto.bus.helper :as AUX])
+    (:require
+        [com.transroutownish.proto.bus.controller :as CTRL]
+        [com.transroutownish.proto.bus.helper     :as AUX ]
+    )
 )
 
 ;; The path and filename of the sample routes data store.
@@ -36,8 +36,6 @@
 ;; from a bus stops sequence: it is an arbitrary identifier
 ;; of a route, which is not used in the routes processing anyhow.
 (defmacro ROUTE-ID-REGEX [] "^\\d+")
-
-(defn reqhandler [req])
 
 (defn -main
     "The microservice entry point.
@@ -91,8 +89,11 @@
 
     (log/debug debug-log-enabled)
 
-    (run-server reqhandler {:port (nth server-port 0)})
-    )))))
+    ; Starting up the daemon.
+    (CTRL/startup (list
+        (nth server-port 0)
+        debug-log-enabled
+    )))))))
 )
 
 ; vim:set nu et ts=4 sw=4:
