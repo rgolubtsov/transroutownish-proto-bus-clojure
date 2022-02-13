@@ -23,7 +23,10 @@
 
     (:import [java.util Scanner])
 
-    (:require [com.transroutownish.proto.bus.helper :as AUX])
+    (:require
+        [com.transroutownish.proto.bus.controller :as CTRL]
+        [com.transroutownish.proto.bus.helper     :as AUX ]
+    )
 )
 
 ;; The path and filename of the sample routes data store.
@@ -56,9 +59,6 @@
     ; from daemon settings.
     (let [server-port (AUX/get-server-port settings)]
 
-    (log/debug server-port)
-    )
-
     ; Getting the path and filename of the routes data store
     ; from daemon settings.
     (let [datastore0 (AUX/get-routes-datastore settings)]
@@ -70,7 +70,7 @@
         (let [routes (Scanner. data)]
 
         (while (.hasNextLine routes)
-            (println (str (.replaceFirst (.nextLine routes)
+            (log/debug (str (.replaceFirst (.nextLine routes)
                 (ROUTE-ID-REGEX) (AUX/EMPTY-STRING)) (AUX/SPACE)))
         )
 
@@ -80,13 +80,16 @@
         (log/fatal (AUX/ERR-DATASTORE-NOT-FOUND))
 
         (System/exit (AUX/EXIT-FAILURE))
-    ))))
+    ))
 
     ; Identifying whether debug logging is enabled.
     (let [debug-log-enabled (AUX/is-debug-log-enabled settings)]
 
-    (log/debug debug-log-enabled)
-    ))
+    ; Starting up the daemon.
+    (CTRL/startup (list
+        (nth server-port 0)
+        debug-log-enabled
+    )))))))
 )
 
 ; vim:set nu et ts=4 sw=4:
