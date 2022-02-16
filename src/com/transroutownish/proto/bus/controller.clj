@@ -47,12 +47,14 @@
 
     (let [server-port       (nth args 0)]
     (let [debug-log-enabled (nth args 1)]
+    (let [routes-vector     (nth args 2)]
 
     (log/debug "HTTP Kit server port number:" server-port)
     (log/debug "Debug log enabled:" debug-log-enabled)
+    (log/debug "Routes:" routes-vector)
 
     (run-server reqhandler {:port server-port})
-    ))
+    )))
 )
 
 ; vim:set nu et ts=4 sw=4:

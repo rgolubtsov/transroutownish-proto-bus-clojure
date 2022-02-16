@@ -59,6 +59,9 @@
     ; from daemon settings.
     (let [server-port (AUX/get-server-port settings)]
 
+    ; Identifying whether debug logging is enabled.
+    (let [debug-log-enabled (AUX/is-debug-log-enabled settings)]
+
     ; Getting the path and filename of the routes data store
     ; from daemon settings.
     (let [datastore0 (AUX/get-routes-datastore settings)]
@@ -69,26 +72,26 @@
 
         (let [routes (Scanner. data)]
 
-        (while (.hasNextLine routes)
-            (log/debug (str (.replaceFirst (.nextLine routes)
+        (let [routes-vector ; <== Like routes_list = new ArrayList();
+
+        (loop [-routes-vector []] (if (.hasNextLine routes)
+            (recur (conj -routes-vector (str (.replaceFirst (.nextLine routes)
                 (ROUTE-ID-REGEX) (AUX/EMPTY-STRING)) (AUX/SPACE)))
-        )
+            )  -routes-vector) ; <== Return value from a loop.
+        )]
 
         (.close routes)
-        ))
+
+        ; Starting up the daemon.
+        (CTRL/startup (list
+            (nth server-port 0)
+            debug-log-enabled
+            routes-vector
+        )))))
     (catch java.io.FileNotFoundException e
         (log/fatal (AUX/ERR-DATASTORE-NOT-FOUND))
 
         (System/exit (AUX/EXIT-FAILURE))
-    ))
-
-    ; Identifying whether debug logging is enabled.
-    (let [debug-log-enabled (AUX/is-debug-log-enabled settings)]
-
-    ; Starting up the daemon.
-    (CTRL/startup (list
-        (nth server-port 0)
-        debug-log-enabled
     )))))))
 )
 
