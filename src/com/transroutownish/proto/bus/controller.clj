@@ -22,6 +22,23 @@
     )
 )
 
+(def ^:dynamic routes-vector [])
+
+(defn find-direct-route
+    "Performs the routes processing (onto bus stops sequences) to identify
+    and return whether a particular interval between two bus stop points
+    given is direct (i.e. contains in any of the routes), or not.
+
+    Args:
+        routes: A vector containing all available routes.
+
+    Returns:
+        true if the direct route is found, false otherwise.
+    " {:added "0.0.1", :static true} [routes]
+
+    (log/debug "Routes:" routes)
+)
+
 (defn reqhandler
     "The request handler callback.
     Gets called when a new incoming HTTP request is received.
@@ -32,6 +49,10 @@
     Returns:
         The HTTP status code, response headers, and a body of the response.
     " {:added "0.0.1", :static true} [req]
+
+    (log/debug "Request:" req)
+
+    (find-direct-route routes-vector)
 )
 
 (defn startup
@@ -47,14 +68,15 @@
 
     (let [server-port       (nth args 0)]
     (let [debug-log-enabled (nth args 1)]
-    (let [routes-vector     (nth args 2)]
+    (let [routes            (nth args 2)]
 
     (log/debug "HTTP Kit server port number:" server-port)
     (log/debug "Debug log enabled:" debug-log-enabled)
-    (log/debug "Routes:" routes-vector)
+
+    (binding [routes-vector routes]
 
     (run-server reqhandler {:port server-port})
-    )))
+    ))))
 )
 
 ; vim:set nu et ts=4 sw=4:
