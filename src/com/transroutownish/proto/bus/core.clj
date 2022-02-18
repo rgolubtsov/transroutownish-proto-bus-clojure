@@ -29,13 +29,19 @@
     )
 )
 
-;; The path and filename of the sample routes data store.
-(defmacro SAMPLE-ROUTES [] "./data/routes.txt")
+(defmacro SAMPLE-ROUTES
+    "The path and filename of the sample routes data store."
 
-;; The regex pattern for the element to be excluded
-;; from a bus stops sequence: it is an arbitrary identifier
-;; of a route, which is not used in the routes processing anyhow.
-(defmacro ROUTE-ID-REGEX [] "^\\d+")
+    [] "./data/routes.txt"
+)
+
+(defmacro ROUTE-ID-REGEX
+    "The regex pattern for the element to be excluded from a bus stops
+    sequence: it is an arbitrary identifier of a route,
+    which is not used in the routes processing anyhow."
+
+    [] "^\\d+"
+)
 
 (defn -main
     "The microservice entry point.
