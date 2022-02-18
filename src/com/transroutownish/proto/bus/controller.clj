@@ -22,7 +22,11 @@
     )
 )
 
-(def ^:dynamic routes-vector [])
+(def routes-vecref
+    "The Ref to a vector containing all available routes."
+
+    (ref [])
+)
 
 (defn find-direct-route
     "Performs the routes processing (onto bus stops sequences) to identify
@@ -52,7 +56,8 @@
 
     (log/debug "Request:" req)
 
-    (find-direct-route routes-vector)
+    ; Performing the routes processing to find out the direct route.
+    (find-direct-route (nth @routes-vecref 0))
 )
 
 (defn startup
@@ -68,15 +73,19 @@
 
     (let [server-port       (nth args 0)]
     (let [debug-log-enabled (nth args 1)]
-    (let [routes            (nth args 2)]
+    (let [routes-vector     (nth args 2)]
 
     (log/debug "HTTP Kit server port number:" server-port)
     (log/debug "Debug log enabled:" debug-log-enabled)
 
-    (binding [routes-vector routes]
+    ; Starting an STM transaction to alter a Ref (routes-vector),
+    ; thus that it will contain all available routes.
+    (dosync
+        (alter routes-vecref conj routes-vector)
+    )
 
     (run-server reqhandler {:port server-port})
-    ))))
+    )))
 )
 
 ; vim:set nu et ts=4 sw=4:
