@@ -1,7 +1,7 @@
 ;
 ; src/com/transroutownish/proto/bus/core.clj
 ; =============================================================================
-; Urban bus routing microservice prototype (Clojure port). Version 0.0.1
+; Urban bus routing microservice prototype (Clojure port). Version 0.0.5
 ; =============================================================================
 ; A daemon written in Clojure, designed and intended to be run
 ; as a microservice, implementing a simple urban bus routing prototype.
@@ -29,13 +29,19 @@
     )
 )
 
-;; The path and filename of the sample routes data store.
-(defmacro SAMPLE-ROUTES [] "./data/routes.txt")
+(defmacro SAMPLE-ROUTES
+    "The path and filename of the sample routes data store."
 
-;; The regex pattern for the element to be excluded
-;; from a bus stops sequence: it is an arbitrary identifier
-;; of a route, which is not used in the routes processing anyhow.
-(defmacro ROUTE-ID-REGEX [] "^\\d+")
+    [] "./data/routes.txt"
+)
+
+(defmacro ROUTE-ID-REGEX
+    "The regex pattern for the element to be excluded from a bus stops
+    sequence: it is an arbitrary identifier of a route,
+    which is not used in the routes processing anyhow."
+
+    [] "^\\d+"
+)
 
 (defn -main
     "The microservice entry point.

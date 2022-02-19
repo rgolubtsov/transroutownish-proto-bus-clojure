@@ -1,7 +1,7 @@
 ;
 ; src/com/transroutownish/proto/bus/controller.clj
 ; =============================================================================
-; Urban bus routing microservice prototype (Clojure port). Version 0.0.1
+; Urban bus routing microservice prototype (Clojure port). Version 0.0.5
 ; =============================================================================
 ; A daemon written in Clojure, designed and intended to be run
 ; as a microservice, implementing a simple urban bus routing prototype.
@@ -22,6 +22,27 @@
     )
 )
 
+(def routes-vecref
+    "The Ref to a vector containing all available routes."
+
+    (ref [])
+)
+
+(defn find-direct-route
+    "Performs the routes processing (onto bus stops sequences) to identify
+    and return whether a particular interval between two bus stop points
+    given is direct (i.e. contains in any of the routes), or not.
+
+    Args:
+        routes: A vector containing all available routes.
+
+    Returns:
+        true if the direct route is found, false otherwise.
+    " {:added "0.0.1", :static true} [routes]
+
+    (log/debug "Routes:" routes)
+)
+
 (defn reqhandler
     "The request handler callback.
     Gets called when a new incoming HTTP request is received.
@@ -32,6 +53,11 @@
     Returns:
         The HTTP status code, response headers, and a body of the response.
     " {:added "0.0.1", :static true} [req]
+
+    (log/debug "Request:" req)
+
+    ; Performing the routes processing to find out the direct route.
+    (find-direct-route (nth @routes-vecref 0))
 )
 
 (defn startup
@@ -51,7 +77,12 @@
 
     (log/debug "HTTP Kit server port number:" server-port)
     (log/debug "Debug log enabled:" debug-log-enabled)
-    (log/debug "Routes:" routes-vector)
+
+    ; Starting an STM transaction to alter a Ref (routes-vector),
+    ; thus that it will contain all available routes.
+    (dosync
+        (alter routes-vecref conj routes-vector)
+    )
 
     (run-server reqhandler {:port server-port})
     )))

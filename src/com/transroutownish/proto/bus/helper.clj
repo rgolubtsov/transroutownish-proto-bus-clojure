@@ -1,7 +1,7 @@
 ;
 ; src/com/transroutownish/proto/bus/helper.clj
 ; =============================================================================
-; Urban bus routing microservice prototype (Clojure port). Version 0.0.1
+; Urban bus routing microservice prototype (Clojure port). Version 0.0.5
 ; =============================================================================
 ; A daemon written in Clojure, designed and intended to be run
 ; as a microservice, implementing a simple urban bus routing prototype.
@@ -46,17 +46,29 @@
           (str "Request parameters must take positive integer values, "
                "in the range 1 .. 2,147,483,647. Please check your inputs."))
 
-;; The minimum port number allowed.
-(defmacro MIN-PORT []  1024)
+(defmacro MIN-PORT
+    "The minimum port number allowed."
 
-;; The maximum port number allowed.
-(defmacro MAX-PORT [] 49151)
+    []  1024
+)
 
-;; The default server port number.
-(defmacro DEF-PORT []  8080)
+(defmacro MAX-PORT
+    "The maximum port number allowed."
 
-;; The daemon settings filename.
-(defmacro SETTINGS [] "settings.edn")
+    [] 49151
+)
+
+(defmacro DEF-PORT
+    "The default server port number."
+
+    []  8080
+)
+
+(defmacro SETTINGS
+    "The daemon settings filename."
+
+    [] "settings.edn"
+)
 
 (defn get-server-port
     "Retrieves the port number used to run the server, from daemon settings.
