@@ -22,7 +22,7 @@
     )
 )
 
-(def routes-vecref
+(def routes-vector-ref
     "The Ref to a vector containing all available routes."
 
     (ref [])
@@ -57,7 +57,7 @@
     (log/debug "Request:" req)
 
     ; Performing the routes processing to find out the direct route.
-    (find-direct-route (nth @routes-vecref 0))
+    (find-direct-route (nth @routes-vector-ref 0))
 )
 
 (defn startup
@@ -81,7 +81,7 @@
     ; Starting an STM transaction to alter a Ref (routes-vector),
     ; thus that it will contain all available routes.
     (dosync
-        (alter routes-vecref conj routes-vector)
+        (alter routes-vector-ref conj routes-vector)
     )
 
     (run-server reqhandler {:port server-port})
