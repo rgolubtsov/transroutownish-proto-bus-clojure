@@ -89,9 +89,6 @@
     (let [debug-log-enabled (nth args 1)]
     (let [routes-vector     (nth args 2)]
 
-    (log/debug "HTTP Kit server port number:" server-port)
-    (log/debug "Debug log enabled:" debug-log-enabled)
-
     ; Starting an STM transaction to alter Refs:
     ; routes vector and debug log enabler.
     (dosync
