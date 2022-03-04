@@ -22,7 +22,13 @@
     )
 )
 
-(def routes-vecref
+(def debug-log-enabled-ref
+    "The Ref to the debug logging enabler."
+
+    (ref [])
+)
+
+(def routes-vector-ref
     "The Ref to a vector containing all available routes."
 
     (ref [])
@@ -40,7 +46,11 @@
         true if the direct route is found, false otherwise.
     " {:added "0.0.1", :static true} [routes]
 
-    (log/debug "Routes:" routes)
+    (let [debug-log-enabled (nth @debug-log-enabled-ref 0)]
+
+    (if debug-log-enabled
+        (log/debug "Routes:" routes)
+    ))
 )
 
 (defn reqhandler
@@ -54,10 +64,14 @@
         The HTTP status code, response headers, and a body of the response.
     " {:added "0.0.1", :static true} [req]
 
-    (log/debug "Request:" req)
+    (let [debug-log-enabled (nth @debug-log-enabled-ref 0)]
+
+    (if debug-log-enabled
+        (log/debug "Request:" req)
+    ))
 
     ; Performing the routes processing to find out the direct route.
-    (find-direct-route (nth @routes-vecref 0))
+    (find-direct-route (nth @routes-vector-ref 0))
 )
 
 (defn startup
@@ -75,13 +89,11 @@
     (let [debug-log-enabled (nth args 1)]
     (let [routes-vector     (nth args 2)]
 
-    (log/debug "HTTP Kit server port number:" server-port)
-    (log/debug "Debug log enabled:" debug-log-enabled)
-
-    ; Starting an STM transaction to alter a Ref (routes-vector),
-    ; thus that it will contain all available routes.
+    ; Starting an STM transaction to alter Refs:
+    ; routes vector and debug log enabler.
     (dosync
-        (alter routes-vecref conj routes-vector)
+        (alter debug-log-enabled-ref conj debug-log-enabled)
+        (alter routes-vector-ref     conj routes-vector    )
     )
 
     (run-server reqhandler {:port server-port})
