@@ -21,7 +21,7 @@
     :dependencies [
         [org.clojure/clojure       "1.10.3"]
         [org.clojure/tools.logging "1.2.4" ]
-        [org.slf4j/slf4j-reload4j  "1.7.35"]
+        [org.slf4j/slf4j-reload4j  "1.7.36"]
         [http-kit                  "2.5.3" ]
     ]
     :main         com.transroutownish.proto.bus.core
