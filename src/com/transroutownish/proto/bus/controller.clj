@@ -18,9 +18,21 @@
         [clojure.tools.logging :as log]
         [org.httpkit.server    :refer [
             run-server
+            as-channel
+            send!
         ]]
     )
+
+    (:require [com.transroutownish.proto.bus.helper :as AUX])
 )
+
+; Helper constants.
+(defmacro REST-PREFIX [] "route" )
+(defmacro REST-DIRECT [] "direct")
+
+(defmacro HTTP-200-OK        [] 200               )
+(defmacro HDR-CONTENT-TYPE-N [] "content-type"    )
+(defmacro HDR-CONTENT-TYPE-V [] "application/json")
 
 (def debug-log-enabled-ref
     "The Ref to the debug logging enabler."
@@ -66,9 +78,23 @@
 
     (let [debug-log-enabled (nth @debug-log-enabled-ref 0)]
 
-    (if debug-log-enabled
+    (if (not debug-log-enabled)
         (log/debug "Request:" req)
     ))
+
+    (let [method (get req :request-method)]
+    (let [uri    (get req :uri           )]
+
+    ; GET /route/direct
+    (if (= method :get)
+        (if (= uri (str (AUX/SLASH) (REST-PREFIX) (AUX/SLASH) (REST-DIRECT)))
+            (as-channel req {:on-open (fn [channel] (send! channel {
+                :status   (HTTP-200-OK)
+                :headers {(HDR-CONTENT-TYPE-N) (HDR-CONTENT-TYPE-V)}
+                :body     "{\"from\":1,\"to\":2,\"direct\":true}"
+            }))})
+        )
+    )))
 
     ; Performing the routes processing to find out the direct route.
     (find-direct-route (nth @routes-vector-ref 0))
