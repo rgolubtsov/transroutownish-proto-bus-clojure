@@ -16,6 +16,12 @@
 
     (:require
         [clojure.tools.logging :as log]
+        [clojure.walk          :refer [
+            keywordize-keys
+        ]]
+        [clojure.string        :refer [
+            split
+        ]]
         [org.httpkit.server    :refer [
             run-server
             as-channel
@@ -33,6 +39,9 @@
 (defmacro HTTP-200-OK        [] 200               )
 (defmacro HDR-CONTENT-TYPE-N [] "content-type"    )
 (defmacro HDR-CONTENT-TYPE-V [] "application/json")
+
+; Extra helper constants.
+(defmacro PARAMS-SEP [] #"=|&")
 
 (def debug-log-enabled-ref
     "The Ref to the debug logging enabler."
@@ -88,11 +97,29 @@
     ; GET /route/direct
     (if (= method :get)
         (if (= uri (str (AUX/SLASH) (REST-PREFIX) (AUX/SLASH) (REST-DIRECT)))
+            ; -----------------------------------------------------------------
+            ; --- Parsing and validating request params - Begin ---------------
+            ; -----------------------------------------------------------------
+            (let [params0 (get req :query-string)]
+            (let [params  (if (nil? params0) {:from 1 :to 1}
+                (keywordize-keys (try
+                    (apply hash-map (split params0 (PARAMS-SEP)))
+                (catch IllegalArgumentException e
+                    {:from 1 :to 1}
+                )))
+            )]
+            ; -----------------------------------------------------------------
+            ; --- Parsing and validating request params - End -----------------
+            ; -----------------------------------------------------------------
+
+            (let [from (get params :from)]
+            (let [to   (get params :to  )]
+
             (as-channel req {:on-open (fn [channel] (send! channel {
                 :status   (HTTP-200-OK)
                 :headers {(HDR-CONTENT-TYPE-N) (HDR-CONTENT-TYPE-V)}
-                :body     "{\"from\":1,\"to\":2,\"direct\":true}"
-            }))})
+                :body     (str "{\"from\":" from ",\"to\":" to "}")
+            }))})))))
         )
     )))
 
