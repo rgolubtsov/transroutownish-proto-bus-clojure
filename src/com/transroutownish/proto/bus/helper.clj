@@ -27,7 +27,6 @@
 (defmacro EMPTY-STRING []   "")
 (defmacro SLASH        []  "/")
 (defmacro EQUALS       []  "=")
-(defmacro BRACES       [] "{}")
 (defmacro SPACE        []  " ")
 (defmacro V-BAR        []  "|")
 (defmacro NEW-LINE     [] "\n")
