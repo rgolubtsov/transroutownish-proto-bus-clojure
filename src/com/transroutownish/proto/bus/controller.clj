@@ -16,6 +16,7 @@
 
     (:require
         [clojure.tools.logging :as log]
+        [clojure.edn           :as edn]
         [clojure.walk          :refer [
             keywordize-keys
         ]]
@@ -36,11 +37,16 @@
 (defmacro REST-PREFIX [] "route" )
 (defmacro REST-DIRECT [] "direct")
 
+(defmacro FROM [] "from")
+(defmacro TO   [] "to"  )
+
 (defmacro HTTP-200-OK        [] 200               )
+(defmacro HTTP-400-BAD-REQ   [] 400               )
 (defmacro HDR-CONTENT-TYPE-N [] "content-type"    )
 (defmacro HDR-CONTENT-TYPE-V [] "application/json")
 
 ; Extra helper constants.
+(defmacro ZERO       []    "0")
 (defmacro PARAMS-SEP [] #"=|&")
 
 (def debug-log-enabled-ref
@@ -53,6 +59,25 @@
     "The Ref to a vector containing all available routes."
 
     (ref [])
+)
+
+(defn -send-response
+    "Helper function. Used to send the HTTP response back to the client.
+
+    Args:
+        req:    The incoming HTTP request object.
+        status: The HTTP status code.
+        body:   The body of the response.
+
+    Returns:
+        A hash map containing the asynchronous HTTP `AsyncChannel`.
+    " {:added "0.0.5", :static true} [req status body]
+
+    (as-channel req {:on-open (fn [channel] (send! channel {
+        :headers {(HDR-CONTENT-TYPE-N) (HDR-CONTENT-TYPE-V)}
+        :status  status
+        :body    body
+    }))})
 )
 
 (defn find-direct-route
@@ -89,7 +114,7 @@
 
     (if (not debug-log-enabled)
         (log/debug "Request:" req)
-    ))
+    )
 
     (let [method (get req :request-method)]
     (let [uri    (get req :uri           )]
@@ -101,30 +126,58 @@
             ; --- Parsing and validating request params - Begin ---------------
             ; -----------------------------------------------------------------
             (let [params0 (get req :query-string)]
-            (let [params  (if (nil? params0) {:from 1 :to 1}
+            (let [params  (if (nil? params0) {:from (ZERO) :to (ZERO)}
                 (keywordize-keys (try
                     (apply hash-map (split params0 (PARAMS-SEP)))
                 (catch IllegalArgumentException e
-                    {:from 1 :to 1}
+                    {:from (ZERO) :to (ZERO)}
                 )))
             )]
-            ; -----------------------------------------------------------------
-            ; --- Parsing and validating request params - End -----------------
-            ; -----------------------------------------------------------------
 
             (let [from (get params :from)]
             (let [to   (get params :to  )]
 
-            (as-channel req {:on-open (fn [channel] (send! channel {
-                :status   (HTTP-200-OK)
-                :headers {(HDR-CONTENT-TYPE-N) (HDR-CONTENT-TYPE-V)}
-                :body     (str "{\"from\":" from ",\"to\":" to "}")
-            }))})))))
-        )
-    )))
+            (if (not debug-log-enabled)
+                (log/debug  (FROM) (AUX/EQUALS) from (AUX/V-BAR)
+                            (TO  ) (AUX/EQUALS) to)
+            )
 
-    ; Performing the routes processing to find out the direct route.
-    (find-direct-route (nth @routes-vector-ref 0))
+            (let [-from (try
+                (edn/read-string from)
+            (catch NumberFormatException e
+                (ZERO)
+            ))]
+
+            (let [-to   (try
+                (edn/read-string to  )
+            (catch NumberFormatException e
+                (ZERO)
+            ))]
+
+            (let [is-request-malformed (try
+                (or (< -from 1) (< -to 1))
+            (catch ClassCastException e
+                true
+            ))]
+            ; -----------------------------------------------------------------
+            ; --- Parsing and validating request params - End -----------------
+            ; -----------------------------------------------------------------
+
+            (if is-request-malformed
+                (-send-response req (HTTP-400-BAD-REQ)
+                    (str "{\"error\":\""
+                        (AUX/ERR-REQ-PARAMS-MUST-BE-POSITIVE-INTS) "\"}"))
+                (do
+                    ; Performing the routes processing
+                    ; to find out the direct route.
+                    (find-direct-route (nth @routes-vector-ref 0))
+
+                    (-send-response req (HTTP-200-OK)
+                        (str "{\"from\":" -from ",\"to\":" -to "}"))
+                )
+            ))))))))
+        )
+    ))))
 )
 
 (defn startup
