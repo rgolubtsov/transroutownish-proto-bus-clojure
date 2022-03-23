@@ -87,16 +87,26 @@
 
     Args:
         routes: A vector containing all available routes.
+        from:   The starting bus stop point.
+        to:     The ending   bus stop point.
 
     Returns:
         true if the direct route is found, false otherwise.
-    " {:added "0.0.1", :static true} [routes]
+    " {:added "0.0.1", :static true} [routes from to]
 
     (let [debug-log-enabled (nth @debug-log-enabled-ref 0)]
 
-    (if debug-log-enabled
-        (log/debug "Routes:" routes)
-    ))
+    (let [routes-count (count routes)]
+
+    (loop [-routes routes i 0] (when (< i routes-count)
+        (let [route (first -routes)]
+
+        (if (not debug-log-enabled)
+            (log/debug (+ i 1) (AUX/EQUALS) route)
+        ))
+
+        (recur (rest -routes) (inc i)))
+    ))) false ; <== TODO: Replace with the actual one after eval.
 )
 
 (defn reqhandler
@@ -111,10 +121,6 @@
     " {:added "0.0.1", :static true} [req]
 
     (let [debug-log-enabled (nth @debug-log-enabled-ref 0)]
-
-    (if (not debug-log-enabled)
-        (log/debug "Request:" req)
-    )
 
     (let [method (get req :request-method)]
     (let [uri    (get req :uri           )]
@@ -167,14 +173,15 @@
                 (-send-response req (HTTP-400-BAD-REQ)
                     (str "{\"error\":\""
                         (AUX/ERR-REQ-PARAMS-MUST-BE-POSITIVE-INTS) "\"}"))
-                (do
-                    ; Performing the routes processing
-                    ; to find out the direct route.
-                    (find-direct-route (nth @routes-vector-ref 0))
 
-                    (-send-response req (HTTP-200-OK)
-                        (str "{\"from\":" -from ",\"to\":" -to "}"))
-                )
+                ;Performing the routes processing to find out the direct route.
+                (let [direct (find-direct-route (nth @routes-vector-ref 0)
+                                                -from -to)]
+
+                (-send-response req (HTTP-200-OK)
+                    (str "{\"from\":"  -from
+                         ",\"to\":"    -to
+                         ",\"direct\":" direct "}")))
             ))))))))
         )
     ))))
