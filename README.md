@@ -42,7 +42,7 @@ One may consider this project has to be suitable for a wide variety of applied a
 
 * **[Building](#building)**
 * **[Running](#running)**
-* **[Operating](#operating)**
+* **[Consuming](#consuming)**
 
 ## Building
 
@@ -101,6 +101,6 @@ $ java -jar target/uberjar/bus-0.0.5-standalone.jar; echo $?
 ...
 ```
 
-## Operating
+## Consuming
 
 (**TBD**)
