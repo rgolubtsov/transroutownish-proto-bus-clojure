@@ -11,13 +11,17 @@
 # (See the LICENSE file at the top of the source tree.)
 #
 
-SERV = target
-TEST = test
-JAR  = jar
+SERV    = target
+TEST    = test
+JAR     = jar
+UBERJAR = uberjar
+VERSION = 0.0.5
 
 # Specify flags and other vars here.
-LEIN = lein
-ECHO = @echo
+LEIN    = lein
+MV      = mv
+MVFLAGS = -v
+ECHO    = @echo
 
 # Making the first target (the microservice itself).
 $(SERV):
@@ -29,7 +33,11 @@ $(TEST):
 
 # Making the third target (runnable JAR file).
 $(JAR):
-	$(LEIN) uberjar
+	$(LEIN) $(UBERJAR)
+	$(MV) $(MVFLAGS) $(SERV)/$(UBERJAR)/bus-$(VERSION).$(JAR)            \
+	      $(SERV)/$(UBERJAR)/bus-$(VERSION).$(JAR).original
+	$(MV) $(MVFLAGS) $(SERV)/$(UBERJAR)/bus-$(VERSION)-standalone.$(JAR) \
+	      $(SERV)/$(UBERJAR)/bus-$(VERSION).$(JAR)
 	$(ECHO)
 
 .PHONY: all clean
