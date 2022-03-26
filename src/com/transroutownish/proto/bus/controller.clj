@@ -101,7 +101,7 @@
     (loop [-routes routes i 0] (when (< i routes-count)
         (let [route (first -routes)]
 
-        (if (not debug-log-enabled)
+        (if debug-log-enabled
             (log/debug (+ i 1) (AUX/EQUALS) route)
         ))
 
@@ -143,7 +143,7 @@
             (let [from (get params :from)]
             (let [to   (get params :to  )]
 
-            (if (not debug-log-enabled)
+            (if debug-log-enabled
                 (log/debug  (FROM) (AUX/EQUALS) from (AUX/V-BAR)
                             (TO  ) (AUX/EQUALS) to)
             )
