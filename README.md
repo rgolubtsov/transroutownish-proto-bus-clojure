@@ -43,6 +43,7 @@ One may consider this project has to be suitable for a wide variety of applied a
 * **[Building](#building)**
 * **[Running](#running)**
 * **[Consuming](#consuming)**
+  * **[Error handling](#error-handling)**
 
 ## Building
 
@@ -103,4 +104,41 @@ $ java -jar target/uberjar/bus-0.0.9.jar; echo $?
 
 ## Consuming
 
-(**TBD**)
+All the routes are contained in a so called **routes data store**. It is located in the `data/` directory. The default filename for it is `routes.txt`, but it can be specified explicitly (if intended to use another one) in the `resources/settings.edn` file.
+
+**Identify**, whether there is a direct route between two bus stops with IDs given in the **HTTP GET** request, searching for them against the underlying **routes data store**:
+
+HTTP request param | Sample value | Another sample value | Yet another sample value
+------------------ | ------------ | -------------------- | ------------------------
+`from`             | `4838`       | `82`                 | `2147483647`
+`to`               | `524987`     | `35390`              | `1`
+
+The direct route is ~~found~~:
+
+```
+$ curl 'http://localhost:8765/route/direct?from=4838&to=524987'
+{"from":4838,"to":524987,"direct":false}
+```
+
+The direct route is not found:
+
+```
+$ curl 'http://localhost:8765/route/direct?from=82&to=35390'
+{"from":82,"to":35390,"direct":false}
+```
+
+### Error handling
+
+When the query string passed in a request, contains inappropriate input, or the URI endpoint doesn't contain anything else at all after its path, the microservice will respond with the **HTTP 400 Bad Request** status code, including a specific response body in JSON representation, like the following:
+
+```
+$ curl 'http://localhost:8765/route/direct?from=qwerty4838&to=-i-.;--089asdf../nj524987'
+{"error":"Request parameters must take positive integer values, in the range 1 .. 2,147,483,647. Please check your inputs."}
+```
+
+Or even simpler:
+
+```
+$ curl http://localhost:8765/route/direct
+{"error":"Request parameters must take positive integer values, in the range 1 .. 2,147,483,647. Please check your inputs."}
+```
