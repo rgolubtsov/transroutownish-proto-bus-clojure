@@ -87,7 +87,7 @@
 
     Returns:
         A hash map containing the asynchronous HTTP `AsyncChannel`.
-    " {:added "0.0.5", :static true} [req status body]
+    " {:added "0.0.5"} [req status body]
 
     (as-channel req {:on-open (fn [channel] (send! channel {
         :headers {(HDR-CONTENT-TYPE-N) (HDR-CONTENT-TYPE-V)}
@@ -108,7 +108,7 @@
 
     Returns:
         `true` if the direct route is found, `false` otherwise.
-    " {:added "0.0.1", :static true} [routes from to]
+    " {:added "0.0.1"} [routes from to]
 
     (let [debug-log-enabled (nth @debug-log-enabled-ref 0)]
 
@@ -153,7 +153,7 @@
 
     Returns:
         The HTTP status code, response headers, and a body of the response.
-    " {:added "0.0.1", :static true} [req]
+    " {:added "0.0.1"} [req]
 
     (let [debug-log-enabled (nth @debug-log-enabled-ref 0)]
 
@@ -231,7 +231,7 @@
 
     Returns:
         The exit code indicating the daemon overall termination status.
-    " {:added "0.0.1", :static true} [args]
+    " {:added "0.0.1"} [args]
 
     (let [server-port       (nth args 0)]
     (let [debug-log-enabled (nth args 1)]

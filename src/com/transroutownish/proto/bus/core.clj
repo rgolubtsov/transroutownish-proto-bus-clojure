@@ -48,7 +48,7 @@
 
     Args:
         args: A list of command-line arguments.
-    " {:added "0.0.1", :static true} [& args]
+    " {:added "0.0.1"} [& args]
 
     ; Getting the daemon settings.
     (let [settings (AUX/-get-settings)]

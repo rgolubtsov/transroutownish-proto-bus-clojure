@@ -77,7 +77,7 @@
 
     Returns:
         The port number on which the server has to be run.
-    " {:added "0.0.1", :static true} [settings]
+    " {:added "0.0.1"} [settings]
 
     (let [server-port (some :server-port settings)]
 
@@ -106,7 +106,7 @@
     Returns:
         The path and filename of the routes data store
         or `nil`, if they are not defined.
-    " {:added "0.0.1", :static true} [settings]
+    " {:added "0.0.1"} [settings]
 
     (let [routes-datastore-path-prefix (some :routes-datastore-path-prefix settings)]
     (let [routes-datastore-path-dir    (some :routes-datastore-path-dir    settings)]
@@ -132,7 +132,7 @@
 
     Returns:
         `true` if debug logging is enabled, `false` otherwise.
-    " {:added "0.0.1", :static true} [settings]
+    " {:added "0.0.1"} [settings]
 
     (let [logger-debug-enabled (some :logger-debug-enabled settings)]
 
@@ -145,7 +145,7 @@
 
     Returns:
         A vector containing maps of individual settings.
-    " {:added "0.0.1", :static true} []
+    " {:added "0.0.1"} []
 
     (edn/read-string (slurp (io/resource (SETTINGS))))
 )
