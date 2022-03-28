@@ -96,7 +96,7 @@ $ # Whilst this is not necessary, it's beneficial knowing the exit code.
 **Run** the microservice using its all-in-one JAR file, built previously by the `uberjar` target:
 
 ```
-$ java -jar target/uberjar/bus-0.0.9.jar; echo $?
+$ java -jar target/uberjar/bus-0.1.5.jar; echo $?
 ...
 ```
 
@@ -111,11 +111,11 @@ HTTP request param | Sample value | Another sample value | Yet another sample va
 `from`             | `4838`       | `82`                 | `2147483647`
 `to`               | `524987`     | `35390`              | `1`
 
-The direct route is ~~found~~:
+The direct route is found:
 
 ```
 $ curl 'http://localhost:8765/route/direct?from=4838&to=524987'
-{"from":4838,"to":524987,"direct":false}
+{"from":4838,"to":524987,"direct":true}
 ```
 
 The direct route is not found:

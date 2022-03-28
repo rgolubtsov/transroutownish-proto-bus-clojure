@@ -1,7 +1,7 @@
 #
 # Makefile
 # =============================================================================
-# Urban bus routing microservice prototype (Clojure port). Version 0.0.9
+# Urban bus routing microservice prototype (Clojure port). Version 0.1.5
 # =============================================================================
 # A daemon written in Clojure, designed and intended to be run
 # as a microservice, implementing a simple urban bus routing prototype.
@@ -15,7 +15,7 @@ SERV    = target
 TEST    = test
 JAR     = jar
 UBERJAR = uberjar
-VERSION = 0.0.9
+VERSION = 0.1.5
 
 # Specify flags and other vars here.
 LEIN    = lein

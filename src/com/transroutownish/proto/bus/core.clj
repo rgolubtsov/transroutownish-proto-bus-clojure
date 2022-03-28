@@ -1,7 +1,7 @@
 ;
 ; src/com/transroutownish/proto/bus/core.clj
 ; =============================================================================
-; Urban bus routing microservice prototype (Clojure port). Version 0.0.9
+; Urban bus routing microservice prototype (Clojure port). Version 0.1.5
 ; =============================================================================
 ; A daemon written in Clojure, designed and intended to be run
 ; as a microservice, implementing a simple urban bus routing prototype.
@@ -48,7 +48,7 @@
 
     Args:
         args: A list of command-line arguments.
-    " {:added "0.0.1", :static true} [& args]
+    " {:added "0.0.1"} [& args]
 
     ; Getting the daemon settings.
     (let [settings (AUX/-get-settings)]

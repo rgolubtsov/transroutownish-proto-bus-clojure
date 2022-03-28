@@ -1,7 +1,7 @@
 ;
 ; src/com/transroutownish/proto/bus/controller.clj
 ; =============================================================================
-; Urban bus routing microservice prototype (Clojure port). Version 0.0.9
+; Urban bus routing microservice prototype (Clojure port). Version 0.1.5
 ; =============================================================================
 ; A daemon written in Clojure, designed and intended to be run
 ; as a microservice, implementing a simple urban bus routing prototype.
@@ -22,6 +22,7 @@
         ]]
         [clojure.string        :refer [
             split
+            index-of
         ]]
         [org.httpkit.server    :refer [
             run-server
@@ -48,6 +49,21 @@
 ; Extra helper constants.
 (defmacro ZERO       []    "0")
 (defmacro PARAMS-SEP [] #"=|&")
+(defmacro TRUE       [] "true")
+
+(defmacro SEQ1-REGEX
+    "The regex pattern for the leading part of a bus stops sequence,
+    before the matching element."
+
+    [] ".*\\s"
+)
+
+(defmacro SEQ2-REGEX
+    "The regex pattern for the trailing part of a bus stops sequence,
+    after the matching element."
+
+    [] "\\s.*"
+)
 
 (def debug-log-enabled-ref
     "The Ref to the debug logging enabler."
@@ -71,7 +87,7 @@
 
     Returns:
         A hash map containing the asynchronous HTTP `AsyncChannel`.
-    " {:added "0.0.5", :static true} [req status body]
+    " {:added "0.0.5"} [req status body]
 
     (as-channel req {:on-open (fn [channel] (send! channel {
         :headers {(HDR-CONTENT-TYPE-N) (HDR-CONTENT-TYPE-V)}
@@ -91,22 +107,41 @@
         to:     The ending   bus stop point.
 
     Returns:
-        true if the direct route is found, false otherwise.
-    " {:added "0.0.1", :static true} [routes from to]
+        `true` if the direct route is found, `false` otherwise.
+    " {:added "0.0.1"} [routes from to]
 
     (let [debug-log-enabled (nth @debug-log-enabled-ref 0)]
 
     (let [routes-count (count routes)]
 
-    (loop [-routes routes i 0] (when (< i routes-count)
-        (let [route (first -routes)]
+    (try
+        (loop [-routes routes i 0] (when (< i routes-count)
+            (let [route (first -routes)]
 
-        (if debug-log-enabled
-            (log/debug (+ i 1) (AUX/EQUALS) route)
-        ))
+            (if debug-log-enabled
+                (log/debug (+ i 1) (AUX/EQUALS) route)
+            )
 
-        (recur (rest -routes) (inc i)))
-    ))) false ; <== TODO: Replace with the actual one after eval.
+            (if (.matches route (str (SEQ1-REGEX) from (SEQ2-REGEX)))
+                ; Pinning in the starting bus stop point, if it's found.
+                ; Next, searching for the ending bus stop point
+                ; on the current route, beginning at the pinned point.
+                (let [route-from (subs route (index-of route (str from)))]
+
+                (if debug-log-enabled
+                    (log/debug from (AUX/V-BAR) route-from)
+                )
+
+                (if (.matches route-from (str (SEQ1-REGEX) to (SEQ2-REGEX)))
+                    (throw (Exception. (TRUE)))
+                ))
+            ))
+
+            (recur (rest -routes) (inc i)))
+        ) false
+    (catch Exception e
+        (.getMessage e) ; <== Like direct = true; break;
+    ))))
 )
 
 (defn reqhandler
@@ -118,7 +153,7 @@
 
     Returns:
         The HTTP status code, response headers, and a body of the response.
-    " {:added "0.0.1", :static true} [req]
+    " {:added "0.0.1"} [req]
 
     (let [debug-log-enabled (nth @debug-log-enabled-ref 0)]
 
@@ -175,8 +210,8 @@
                         (AUX/ERR-REQ-PARAMS-MUST-BE-POSITIVE-INTS) "\"}"))
 
                 ;Performing the routes processing to find out the direct route.
-                (let [direct (find-direct-route (nth @routes-vector-ref 0)
-                                                -from -to)]
+                (let [direct (if (= -from -to) false
+                     (find-direct-route (nth @routes-vector-ref 0) -from -to))]
 
                 (-send-response req (HTTP-200-OK)
                     (str "{\"from\":"  -from
@@ -196,7 +231,7 @@
 
     Returns:
         The exit code indicating the daemon overall termination status.
-    " {:added "0.0.1", :static true} [args]
+    " {:added "0.0.1"} [args]
 
     (let [server-port       (nth args 0)]
     (let [debug-log-enabled (nth args 1)]
