@@ -128,7 +128,7 @@
                 ; on the current route, beginning at the pinned point.
                 (let [route-from (subs route (index-of route (str from)))]
 
-                (if (not debug-log-enabled)
+                (if debug-log-enabled
                     (log/debug from (AUX/V-BAR) route-from)
                 )
 
