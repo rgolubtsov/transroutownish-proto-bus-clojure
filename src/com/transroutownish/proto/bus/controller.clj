@@ -22,6 +22,7 @@
         ]]
         [clojure.string        :refer [
             split
+            index-of
         ]]
         [org.httpkit.server    :refer [
             run-server
@@ -48,6 +49,21 @@
 ; Extra helper constants.
 (defmacro ZERO       []    "0")
 (defmacro PARAMS-SEP [] #"=|&")
+(defmacro TRUE       [] "true")
+
+(defmacro SEQ1-REGEX
+    "The regex pattern for the leading part of a bus stops sequence,
+    before the matching element."
+
+    [] ".*\\s"
+)
+
+(defmacro SEQ2-REGEX
+    "The regex pattern for the trailing part of a bus stops sequence,
+    after the matching element."
+
+    [] "\\s.*"
+)
 
 (def debug-log-enabled-ref
     "The Ref to the debug logging enabler."
@@ -98,15 +114,34 @@
 
     (let [routes-count (count routes)]
 
-    (loop [-routes routes i 0] (when (< i routes-count)
-        (let [route (first -routes)]
+    (try
+        (loop [-routes routes i 0] (when (< i routes-count)
+            (let [route (first -routes)]
 
-        (if debug-log-enabled
-            (log/debug (+ i 1) (AUX/EQUALS) route)
-        ))
+            (if debug-log-enabled
+                (log/debug (+ i 1) (AUX/EQUALS) route)
+            )
 
-        (recur (rest -routes) (inc i)))
-    ))) false ; <== TODO: Replace with the actual one after eval.
+            (if (.matches route (str (SEQ1-REGEX) from (SEQ2-REGEX)))
+                ; Pinning in the starting bus stop point, if it's found.
+                ; Next, searching for the ending bus stop point
+                ; on the current route, beginning at the pinned point.
+                (let [route-from (subs route (index-of route (str from)))]
+
+                (if (not debug-log-enabled)
+                    (log/debug from (AUX/V-BAR) route-from)
+                )
+
+                (if (.matches route-from (str (SEQ1-REGEX) to (SEQ2-REGEX)))
+                    (throw (Exception. (TRUE)))
+                ))
+            ))
+
+            (recur (rest -routes) (inc i)))
+        ) false
+    (catch Exception e
+        (.getMessage e) ; <== Like direct = true; break;
+    ))))
 )
 
 (defn reqhandler
@@ -175,8 +210,8 @@
                         (AUX/ERR-REQ-PARAMS-MUST-BE-POSITIVE-INTS) "\"}"))
 
                 ;Performing the routes processing to find out the direct route.
-                (let [direct (find-direct-route (nth @routes-vector-ref 0)
-                                                -from -to)]
+                (let [direct (if (= -from -to) false
+                     (find-direct-route (nth @routes-vector-ref 0) -from -to))]
 
                 (-send-response req (HTTP-200-OK)
                     (str "{\"from\":"  -from
