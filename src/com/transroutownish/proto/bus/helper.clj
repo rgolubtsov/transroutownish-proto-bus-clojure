@@ -105,7 +105,7 @@
 
     Returns:
         The path and filename of the routes data store
-        or nil, if they are not defined.
+        or `nil`, if they are not defined.
     " {:added "0.0.1", :static true} [settings]
 
     (let [routes-datastore-path-prefix (some :routes-datastore-path-prefix settings)]
@@ -131,7 +131,7 @@
         The vector containing maps of individual settings.
 
     Returns:
-        true if debug logging is enabled, false otherwise.
+        `true` if debug logging is enabled, `false` otherwise.
     " {:added "0.0.1", :static true} [settings]
 
     (let [logger-debug-enabled (some :logger-debug-enabled settings)]

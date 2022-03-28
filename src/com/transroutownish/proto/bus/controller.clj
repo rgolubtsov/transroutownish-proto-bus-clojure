@@ -107,7 +107,7 @@
         to:     The ending   bus stop point.
 
     Returns:
-        true if the direct route is found, false otherwise.
+        `true` if the direct route is found, `false` otherwise.
     " {:added "0.0.1", :static true} [routes from to]
 
     (let [debug-log-enabled (nth @debug-log-enabled-ref 0)]
