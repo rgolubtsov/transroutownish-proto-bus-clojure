@@ -39,7 +39,9 @@ One may consider this project has to be suitable for a wide variety of applied a
 ## Table of Contents
 
 * **[Building](#building)**
+  * **[Creating a Docker image](#creating-a-docker-image)**
 * **[Running](#running)**
+  * **[Running a Docker image](#running-a-docker-image)**
 * **[Consuming](#consuming)**
   * **[Error handling](#error-handling)**
 
@@ -80,6 +82,15 @@ $ make all  # <== This is equivalent to the jar target.
 ...
 ```
 
+### Creating a Docker image
+
+**Build** a Docker image for the microservice:
+
+```
+$ sudo docker build -ttransroutownish/busclj .
+...
+```
+
 ## Running
 
 **Run** the microservice using **Leiningen** (generally for development and debugging purposes):
@@ -97,6 +108,16 @@ $ # Whilst this is not necessary, it's beneficial knowing the exit code.
 
 ```
 $ java -jar target/uberjar/bus-0.9.0.jar; echo $?
+...
+```
+
+### Running a Docker image
+
+**Run** a Docker image of the microservice, deleting all stopped containers prior to that:
+
+```
+$ sudo docker rm `sudo docker ps -aq` && \
+  export PORT=8765 && sudo docker run -dp${PORT}:${PORT} --name busclj transroutownish/busclj; echo $?
 ...
 ```
 
