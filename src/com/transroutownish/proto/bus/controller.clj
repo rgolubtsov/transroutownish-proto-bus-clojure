@@ -24,6 +24,9 @@
             split
             index-of
         ]]
+        [clojure.data.json     :refer [
+            write-str
+        ]]
         [org.httpkit.server    :refer [
             run-server
             as-channel
@@ -140,7 +143,7 @@
             (recur (rest -routes) (inc i)))
         ) false
     (catch Exception e
-        (.getMessage e) ; <== Like direct = true; break;
+        (read-string (.getMessage e)) ; <== Like direct = true; break;
     ))))
 )
 
@@ -205,18 +208,17 @@
             ; -----------------------------------------------------------------
 
             (if is-request-malformed
-                (-send-response req (HTTP-400-BAD-REQ)
-                    (str "{\"error\":\""
-                        (AUX/ERR-REQ-PARAMS-MUST-BE-POSITIVE-INTS) "\"}"))
+                (-send-response req (HTTP-400-BAD-REQ) (write-str (hash-map
+                    :error (AUX/ERR-REQ-PARAMS-MUST-BE-POSITIVE-INTS))))
 
                 ;Performing the routes processing to find out the direct route.
                 (let [direct (if (= -from -to) false
                      (find-direct-route (nth @routes-vector-ref 0) -from -to))]
 
-                (-send-response req (HTTP-200-OK)
-                    (str "{\"from\":"  -from
-                         ",\"to\":"    -to
-                         ",\"direct\":" direct "}")))
+                (-send-response req (HTTP-200-OK     ) (write-str (hash-map
+                    :from  -from
+                    :to    -to
+                    :direct direct))))
             ))))))))
         )
     ))))
