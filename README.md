@@ -42,6 +42,7 @@ One may consider this project has to be suitable for a wide variety of applied a
   * **[Creating a Docker image](#creating-a-docker-image)**
 * **[Running](#running)**
   * **[Running a Docker image](#running-a-docker-image)**
+  * **[Exploring a Docker image payload](#exploring-a-docker-image-payload)**
 * **[Consuming](#consuming)**
   * **[Error handling](#error-handling)**
 
@@ -119,6 +120,52 @@ $ java -jar target/uberjar/bus-0.9.0.jar; echo $?
 $ sudo docker rm `sudo docker ps -aq` && \
   export PORT=8765 && sudo docker run -dp${PORT}:${PORT} --name busclj transroutownish/busclj; echo $?
 ...
+```
+
+### Exploring a Docker image payload
+
+The following is not necessary but might be considered interesting &mdash; to look up into the running container, and check out that the microservice's all-in-one JAR file, log, and routes data store are at their expected places and in effect:
+
+```
+$ sudo docker ps -a
+CONTAINER ID   IMAGE                    COMMAND               CREATED             STATUS             PORTS                                       NAMES
+<container_id> transroutownish/busclj   "java -jar bus.jar"   About an hour ago   Up About an hour   0.0.0.0:8765->8765/tcp, :::8765->8765/tcp   busclj
+$
+$ sudo docker exec -it busclj sh; echo $?
+/var/tmp $
+/var/tmp $ java --version
+openjdk 11.0.13 2021-10-19 LTS
+OpenJDK Runtime Environment Zulu11.52+13-CA (build 11.0.13+8-LTS)
+OpenJDK 64-Bit Server VM Zulu11.52+13-CA (build 11.0.13+8-LTS, mixed mode)
+/var/tmp $
+/var/tmp $ ls -al
+total 5432
+drwxrwxrwt    1 root     root          4096 Mar 30 00:00 .
+drwxr-xr-x    1 root     root          4096 Aug 27  2021 ..
+-rw-rw-r--    1 root     root       5538900 Mar 30 00:00 bus.jar
+drwxr-xr-x    2 root     root          4096 Mar 30 00:00 data
+drwxr-xr-x    2 daemon   daemon        4096 Mar 30 00:00 log
+/var/tmp $
+/var/tmp $ ls -al data/ log/
+data/:
+total 56
+drwxr-xr-x    2 root     root          4096 Mar 30 00:00 .
+drwxrwxrwt    1 root     root          4096 Mar 30 00:00 ..
+-rw-rw-r--    1 root     root         46218 Mar 30 00:00 routes.txt
+
+log/:
+total 8
+drwxr-xr-x    2 daemon   daemon        4096 Mar 30 00:00 .
+drwxrwxrwt    1 root     root          4096 Mar 30 00:00 ..
+-rw-r--r--    1 daemon   daemon           0 Mar 30 00:00 bus.log
+/var/tmp $
+/var/tmp $ netstat -plunt
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:8765            0.0.0.0:*               LISTEN      1/java
+/var/tmp $
+/var/tmp $ exit # Or simply <Ctrl-D>.
+0
 ```
 
 ## Consuming
