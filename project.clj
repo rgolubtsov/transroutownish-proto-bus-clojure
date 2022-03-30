@@ -1,7 +1,7 @@
 ;
 ; project.clj
 ; =============================================================================
-; Urban bus routing microservice prototype (Clojure port). Version 0.9.0
+; Urban bus routing microservice prototype (Clojure port). Version 0.10.0
 ; =============================================================================
 ; A daemon written in Clojure, designed and intended to be run
 ; as a microservice, implementing a simple urban bus routing prototype.
@@ -11,7 +11,7 @@
 ; (See the LICENSE file at the top of the source tree.)
 ;
 
-(defproject bus   "0.9.0"
+(defproject bus   "0.10.0"
     :description  "Urban bus routing microservice prototype."
     :url          "https://github.com/rgolubtsov/transroutownish-proto-bus-clojure"
     :license {
