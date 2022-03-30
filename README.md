@@ -108,7 +108,7 @@ $ # Whilst this is not necessary, it's beneficial knowing the exit code.
 **Run** the microservice using its all-in-one JAR file, built previously by the `uberjar` target:
 
 ```
-$ java -jar target/uberjar/bus-0.10.0.jar; echo $?
+$ java -jar target/uberjar/bus-0.10.1.jar; echo $?
 ...
 ```
 
