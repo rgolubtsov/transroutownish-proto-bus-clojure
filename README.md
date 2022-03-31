@@ -68,7 +68,7 @@ $ lein uberjar
 ...
 ```
 
-Or **build** the microservice using **GNU Make** (optional, but for convenience &mdash; it covers the same **Leiningen** build workflow under the hood):
+Or **build** the microservice using **GNU Make** (it covers the same **Leiningen** build workflow under the hood, plus prepares the final all-in-one JAR file for further Docker containerization &mdash; this is preferred and encouraged build variant):
 
 ```
 $ make clean
