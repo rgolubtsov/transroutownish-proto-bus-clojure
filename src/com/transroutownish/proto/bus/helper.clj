@@ -45,6 +45,10 @@
           (str "Request parameters must take positive integer values, "
                "in the range 1 .. 2,147,483,647. Please check your inputs."))
 
+; Common notification messages.
+(defmacro MSG-SERVER-STARTED [] "Server started on port")
+(defmacro MSG-SERVER-STOPPED [] "Server stopped"        )
+
 (defmacro MIN-PORT
     "The minimum port number allowed."
 
