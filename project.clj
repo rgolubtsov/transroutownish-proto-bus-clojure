@@ -23,6 +23,8 @@
         [org.clojure/tools.logging "1.2.4" ]
         [org.clojure/data.json     "2.4.0" ]
         [org.slf4j/slf4j-reload4j  "1.7.36"]
+        [org.graylog2/syslog4j     "0.9.60"]
+        [net.java.dev.jna/jna      "5.11.0"]
         [http-kit                  "2.5.3" ]
     ]
     :main         com.transroutownish.proto.bus.core
