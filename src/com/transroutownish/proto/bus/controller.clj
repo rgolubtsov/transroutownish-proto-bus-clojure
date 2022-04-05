@@ -34,6 +34,12 @@
         ]]
     )
 
+    (:import
+        [org.graylog2.syslog4j.impl.unix UnixSyslogConfig]
+        [org.graylog2.syslog4j.impl.unix UnixSyslog      ]
+        [org.graylog2.syslog4j SyslogIF                  ]
+    )
+
     (:require [com.transroutownish.proto.bus.helper :as AUX])
 )
 
@@ -76,6 +82,12 @@
 
 (def routes-vector-ref
     "The Ref to a vector containing all available routes."
+
+    (ref [])
+)
+
+(def s-ref
+    "The Ref to the Unix system logger."
 
     (ref [])
 )
@@ -160,6 +172,8 @@
 
     (let [debug-log-enabled (nth @debug-log-enabled-ref 0)]
 
+    (let [s (nth @s-ref 0)] ; <== The Unix system logger.
+
     (let [method (get req :request-method)]
     (let [uri    (get req :uri           )]
 
@@ -181,10 +195,15 @@
             (let [from (get params :from)]
             (let [to   (get params :to  )]
 
-            (if debug-log-enabled
-                (log/debug  (FROM) (AUX/EQUALS) from (AUX/V-BAR)
-                            (TO  ) (AUX/EQUALS) to)
-            )
+            (if debug-log-enabled (do
+                (log/debug (FROM) (AUX/EQUALS) from (AUX/V-BAR)
+                           (TO  ) (AUX/EQUALS) to)
+
+                (.debug  s (str (FROM) (AUX/SPACE) (AUX/EQUALS) (AUX/SPACE)
+                                 from  (AUX/SPACE) (AUX/V-BAR ) (AUX/SPACE)
+                                (TO  ) (AUX/SPACE) (AUX/EQUALS) (AUX/SPACE)
+                                 to))
+            ))
 
             (let [-from (try
                 (edn/read-string from)
@@ -221,7 +240,7 @@
                     :direct direct))))
             ))))))))
         )
-    ))))
+    )))))
 )
 
 (defn startup
@@ -246,8 +265,18 @@
         (alter routes-vector-ref     conj routes-vector    )
     )
 
+    ; Opening the system logger.
+    ; Calling <syslog.h> openlog(NULL, LOG_CONS | LOG_PID, LOG_DAEMON);
+    (let [cfg (UnixSyslogConfig.)]
+    (.setIdent cfg nil) (.setFacility cfg SyslogIF/FACILITY_DAEMON)
+    (let [s (UnixSyslog.)] (.initialize s SyslogIF/UNIX_SYSLOG cfg)
+    (dosync (alter s-ref conj s))
+
     (run-server reqhandler {:port server-port})
-    )))
+
+    (log/info      (AUX/MSG-SERVER-STARTED)             server-port)
+    (.info  s (str (AUX/MSG-SERVER-STARTED) (AUX/SPACE) server-port))
+    )))))
 )
 
 ; vim:set nu et ts=4 sw=4:
