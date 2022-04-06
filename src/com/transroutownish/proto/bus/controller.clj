@@ -27,6 +27,9 @@
         [clojure.data.json     :refer [
             write-str
         ]]
+        [clojure.repl          :refer [
+            set-break-handler!
+        ]]
         [org.httpkit.server    :refer [
             run-server
             as-channel
@@ -276,7 +279,17 @@
 
     (log/info      (AUX/MSG-SERVER-STARTED)             server-port)
     (.info  s (str (AUX/MSG-SERVER-STARTED) (AUX/SPACE) server-port))
-    )))))
+
+    (set-break-handler! (fn [_]
+        (log/info (AUX/MSG-SERVER-STOPPED))
+        (.info  s (AUX/MSG-SERVER-STOPPED))
+
+        ; Closing the system logger.
+        ; Calling <syslog.h> closelog();
+        (.shutdown s)
+
+        (System/exit (AUX/EXIT-SUCCESS))
+    )))))))
 )
 
 ; vim:set nu et ts=4 sw=4:
