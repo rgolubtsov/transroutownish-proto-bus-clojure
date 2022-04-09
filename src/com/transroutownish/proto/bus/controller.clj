@@ -275,7 +275,7 @@
     (let [s (UnixSyslog.)] (.initialize s SyslogIF/UNIX_SYSLOG cfg)
     (dosync (alter s-ref conj s))
 
-    (run-server reqhandler {:port server-port})
+    (let [stop-server (run-server reqhandler {:port server-port})]
 
     (log/info      (AUX/MSG-SERVER-STARTED)             server-port)
     (.info  s (str (AUX/MSG-SERVER-STARTED) (AUX/SPACE) server-port))
@@ -288,8 +288,8 @@
         ; Calling <syslog.h> closelog();
         (.shutdown s)
 
-        (System/exit (AUX/EXIT-SUCCESS))
-    )))))))
+        (stop-server) ; (System/exit (AUX/EXIT-SUCCESS))
+    ))))))))
 )
 
 ; vim:set nu et ts=4 sw=4:
