@@ -44,6 +44,7 @@ One may consider this project has to be suitable for a wide variety of applied a
   * **[Running a Docker image](#running-a-docker-image)**
   * **[Exploring a Docker image payload](#exploring-a-docker-image-payload)**
 * **[Consuming](#consuming)**
+  * **[Logging](#logging)**
   * **[Error handling](#error-handling)**
 
 ## Building
@@ -139,10 +140,10 @@ OpenJDK Runtime Environment Zulu11.52+13-CA (build 11.0.13+8-LTS)
 OpenJDK 64-Bit Server VM Zulu11.52+13-CA (build 11.0.13+8-LTS, mixed mode)
 /var/tmp $
 /var/tmp $ ls -al
-total 5432
+total 8676
 drwxrwxrwt    1 root     root          4096 Mar 30 00:00 .
 drwxr-xr-x    1 root     root          4096 Aug 27  2021 ..
--rw-rw-r--    1 root     root       5538900 Mar 30 00:00 bus.jar
+-rw-rw-r--    1 root     root       8863694 Mar 30 00:00 bus.jar
 drwxr-xr-x    2 root     root          4096 Mar 30 00:00 data
 drwxr-xr-x    2 daemon   daemon        4096 Mar 30 00:00 log
 /var/tmp $
@@ -154,15 +155,21 @@ drwxrwxrwt    1 root     root          4096 Mar 30 00:00 ..
 -rw-rw-r--    1 root     root         46218 Mar 30 00:00 routes.txt
 
 log/:
-total 8
+total 12
 drwxr-xr-x    2 daemon   daemon        4096 Mar 30 00:00 .
 drwxrwxrwt    1 root     root          4096 Mar 30 00:00 ..
--rw-r--r--    1 daemon   daemon           0 Mar 30 00:00 bus.log
+-rw-r--r--    1 daemon   daemon          59 Mar 30 00:00 bus.log
 /var/tmp $
 /var/tmp $ netstat -plunt
 Active Internet connections (only servers)
 Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
 tcp        0      0 0.0.0.0:8765            0.0.0.0:*               LISTEN      1/java
+/var/tmp $
+/var/tmp $ ps ax
+PID   USER     TIME  COMMAND
+    1 daemon    0:10 java -jar bus.jar
+   21 daemon    0:00 sh
+   41 daemon    0:00 ps ax
 /var/tmp $
 /var/tmp $ exit # Or simply <Ctrl-D>.
 0
@@ -191,6 +198,48 @@ The direct route is not found:
 ```
 $ curl 'http://localhost:8765/route/direct?from=82&to=35390'
 {"direct":false,"from":82,"to":35390}
+```
+
+### Logging
+
+The microservice has the ability to log messages to a logfile and to the Unix syslog facility. When running directly under Ubuntu Server (not in a Docker container), logs can be seen and analyzed in an ordinary fashion, by `tail`ing the `log/bus.log` logfile:
+
+```
+$ tail -f log/bus.log
+...
+[2022-04-10][20:10:30][INFO ]  Server started on port 8765
+[2022-04-10][20:12:20][DEBUG]  from=4838 | to=524987
+[2022-04-10][20:13:10][DEBUG]  from=82 | to=35390
+[2022-04-10][20:15:00][INFO ]  Server stopped
+```
+
+Messages registered by the Unix system logger can be seen and analyzed using the `journalctl` utility:
+
+```
+$ journalctl -f
+...
+Apr 10 20:10:30 <vmhostname> java[<pid>]: Server started on port 8765
+Apr 10 20:12:20 <vmhostname> java[<pid>]: from=4838 | to=524987
+Apr 10 20:13:10 <vmhostname> java[<pid>]: from=82 | to=35390
+Apr 10 20:15:00 <vmhostname> java[<pid>]: Server stopped
+```
+
+Inside the running container logs might be queried also by `tail`ing the `log/bus.log` logfile:
+
+```
+/var/tmp $ tail -f log/bus.log
+[2022-04-10][20:20:10][INFO ]  Server started on port 8765
+[2022-04-10][20:20:30][DEBUG]  from=4838 | to=524987
+[2022-04-10][20:20:40][DEBUG]  from=82 | to=35390
+```
+
+And of course Docker itself gives the possibility to read log messages by using the corresponding command for that:
+
+```
+$ sudo docker logs -f busclj
+[2022-04-10][20:20:10][INFO ]  Server started on port 8765
+[2022-04-10][20:20:30][DEBUG]  from=4838 | to=524987
+[2022-04-10][20:20:40][DEBUG]  from=82 | to=35390
 ```
 
 ### Error handling
