@@ -19,7 +19,7 @@
         :url  "https://raw.githubusercontent.com/rgolubtsov/transroutownish-proto-bus-clojure/main/LICENSE"
     }
     :dependencies [
-        [org.clojure/clojure       "1.11.0"]
+        [org.clojure/clojure       "1.11.1"]
         [org.clojure/tools.logging "1.2.4" ]
         [org.clojure/data.json     "2.4.0" ]
         [org.slf4j/slf4j-reload4j  "1.7.36"]
