@@ -143,7 +143,7 @@ OpenJDK 64-Bit Server VM Zulu11.52+13-CA (build 11.0.13+8-LTS, mixed mode)
 total 8680
 drwxrwxrwt    1 root     root          4096 Mar 30 00:00 .
 drwxr-xr-x    1 root     root          4096 Aug 27  2021 ..
--rw-rw-r--    1 root     root       8864180 Mar 30 00:00 bus.jar
+-rw-rw-r--    1 root     root       8864290 Mar 30 00:00 bus.jar
 drwxr-xr-x    2 root     root          4096 Mar 30 00:00 data
 drwxr-xr-x    2 daemon   daemon        4096 Mar 30 00:00 log
 /var/tmp $
@@ -172,7 +172,7 @@ PID   USER     TIME  COMMAND
    41 daemon    0:00 ps ax
 /var/tmp $
 /var/tmp $ exit # Or simply <Ctrl-D>.
-130
+0
 ```
 
 ## Consuming
