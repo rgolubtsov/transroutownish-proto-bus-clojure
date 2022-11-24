@@ -16,7 +16,7 @@
 #       to use official Clojure images (https://hub.docker.com/_/clojure).
 #       Instead, it is recommended to use any JRE-only flavors of slim
 #       (e.g. Alpine) images.
-FROM       azul/zulu-openjdk-alpine:11-jre-headless
+FROM       azul/zulu-openjdk-alpine:11-jre-headless-latest
 USER       daemon
 WORKDIR    var/tmp
 COPY       target/uberjar/*.jar bus.jar
