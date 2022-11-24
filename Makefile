@@ -28,7 +28,7 @@ $(SERV):
 	$(LEIN) compile :all
 
 # Making the second target (tests).
-$(TEST):
+$(TEST)s:
 	$(LEIN) $(TEST)
 
 # Making the third target (runnable JAR file).
