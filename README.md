@@ -139,30 +139,30 @@ $
 $ sudo docker exec -it busclj sh; echo $?
 /var/tmp $
 /var/tmp $ java --version
-openjdk 11.0.13 2021-10-19 LTS
-OpenJDK Runtime Environment Zulu11.52+13-CA (build 11.0.13+8-LTS)
-OpenJDK 64-Bit Server VM Zulu11.52+13-CA (build 11.0.13+8-LTS, mixed mode)
+openjdk 11.0.17 2022-10-18 LTS
+OpenJDK Runtime Environment Zulu11.60+19-CA (build 11.0.17+8-LTS)
+OpenJDK 64-Bit Server VM Zulu11.60+19-CA (build 11.0.17+8-LTS, mixed mode)
 /var/tmp $
 /var/tmp $ ls -al
-total 8680
-drwxrwxrwt    1 root     root          4096 Mar 30 00:00 .
-drwxr-xr-x    1 root     root          4096 Aug 27  2021 ..
--rw-rw-r--    1 root     root       8864290 Mar 30 00:00 bus.jar
-drwxr-xr-x    2 root     root          4096 Mar 30 00:00 data
-drwxr-xr-x    2 daemon   daemon        4096 Mar 30 00:00 log
+total 8740
+drwxrwxrwt    1 root     root          4096 Nov 24 19:05 .
+drwxr-xr-x    1 root     root          4096 Aug  9 08:58 ..
+-rw-rw-r--    1 root     root       8928455 Nov 24 18:00 bus.jar
+drwxr-xr-x    2 root     root          4096 Nov 24 19:00 data
+drwxr-xr-x    2 daemon   daemon        4096 Nov 24 19:05 log
 /var/tmp $
 /var/tmp $ ls -al data/ log/
 data/:
 total 56
-drwxr-xr-x    2 root     root          4096 Mar 30 00:00 .
-drwxrwxrwt    1 root     root          4096 Mar 30 00:00 ..
--rw-rw-r--    1 root     root         46218 Mar 30 00:00 routes.txt
+drwxr-xr-x    2 root     root          4096 Nov 24 19:00 .
+drwxrwxrwt    1 root     root          4096 Nov 24 19:05 ..
+-rw-rw-r--    1 root     root         46218 Jan 29  2022 routes.txt
 
 log/:
 total 12
-drwxr-xr-x    2 daemon   daemon        4096 Mar 30 00:00 .
-drwxrwxrwt    1 root     root          4096 Mar 30 00:00 ..
--rw-r--r--    1 daemon   daemon          59 Mar 30 00:00 bus.log
+drwxr-xr-x    2 daemon   daemon        4096 Nov 24 19:05 .
+drwxrwxrwt    1 root     root          4096 Nov 24 19:05 ..
+-rw-r--r--    1 daemon   daemon          59 Nov 24 19:05 bus.log
 /var/tmp $
 /var/tmp $ netstat -plunt
 Active Internet connections (only servers)
@@ -171,9 +171,9 @@ tcp        0      0 0.0.0.0:8765            0.0.0.0:*               LISTEN      
 /var/tmp $
 /var/tmp $ ps ax
 PID   USER     TIME  COMMAND
-    1 daemon    0:10 java -jar bus.jar
-   21 daemon    0:00 sh
-   41 daemon    0:00 ps ax
+    1 daemon    0:08 java -jar bus.jar
+   22 daemon    0:00 sh
+   42 daemon    0:00 ps ax
 /var/tmp $
 /var/tmp $ exit # Or simply <Ctrl-D>.
 0
