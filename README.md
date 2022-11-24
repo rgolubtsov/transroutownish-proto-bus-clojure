@@ -218,10 +218,10 @@ Messages registered by the Unix system logger can be seen and analyzed using the
 ```
 $ journalctl -f
 ...
-Apr 10 20:10:30 <vmhostname> java[<pid>]: Server started on port 8765
-Apr 10 20:12:20 <vmhostname> java[<pid>]: from=4838 | to=524987
-Apr 10 20:13:10 <vmhostname> java[<pid>]: from=82 | to=35390
-Apr 10 20:15:00 <vmhostname> java[<pid>]: Server stopped
+Apr 10 20:10:30 <hostname> java[<pid>]: Server started on port 8765
+Apr 10 20:12:20 <hostname> java[<pid>]: from=4838 | to=524987
+Apr 10 20:13:10 <hostname> java[<pid>]: from=82 | to=35390
+Apr 10 20:15:00 <hostname> java[<pid>]: Server stopped
 ```
 
 Inside the running container logs might be queried also by `tail`ing the `log/bus.log` logfile:
