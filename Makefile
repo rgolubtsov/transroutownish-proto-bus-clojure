@@ -6,7 +6,7 @@
 # A daemon written in Clojure, designed and intended to be run
 # as a microservice, implementing a simple urban bus routing prototype.
 # =============================================================================
-# Copyright (C) 2021-2022 Radislav (Radicchio) Golubtsov
+# Copyright (C) 2021-2023 Radislav (Radicchio) Golubtsov
 #
 # (See the LICENSE file at the top of the source tree.)
 #
