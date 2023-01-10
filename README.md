@@ -122,7 +122,7 @@ $ java -jar target/uberjar/bus-0.15.2.jar; echo $?
 **Run** a Docker image of the microservice, deleting all stopped containers prior to that:
 
 ```
-$ sudo docker rm `sudo docker ps -aq` && \
+$ sudo docker rm `sudo docker ps -aq`; \
   export PORT=8765 && sudo docker run -dp${PORT}:${PORT} --name busclj transroutownish/busclj; echo $?
 ...
 ```
