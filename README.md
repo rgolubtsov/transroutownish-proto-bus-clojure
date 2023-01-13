@@ -90,7 +90,7 @@ $ make all  # <== This is equivalent to the jar target.
 
 ```
 $ # Pull the JRE image first, if not already there:
-$ sudo docker pull azul/zulu-openjdk-alpine:11-jre-headless-latest
+$ sudo docker pull azul/zulu-openjdk-alpine:17-jre-headless-latest
 ...
 $ # Then build the microservice image:
 $ sudo docker build -ttransroutownish/busclj .
