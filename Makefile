@@ -12,7 +12,6 @@
 #
 
 SERV    = target
-TEST    = test
 JAR     = jar
 UBERJAR = uberjar
 VERSION = 0.20.0
@@ -27,11 +26,7 @@ ECHO    = @echo
 $(SERV):
 	$(LEIN) compile :all
 
-# Making the second target (tests).
-$(TEST)s:
-	$(LEIN) $(TEST)
-
-# Making the third target (runnable JAR file).
+# Making the second target (runnable JAR file).
 $(JAR):
 	$(LEIN) $(UBERJAR)
 	$(MV) $(MVFLAGS) $(SERV)/$(UBERJAR)/bus-$(VERSION).$(JAR)            \
