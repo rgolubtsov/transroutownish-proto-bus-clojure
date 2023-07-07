@@ -135,30 +135,30 @@ $
 $ sudo docker exec -it busclj sh; echo $?
 /var/tmp $
 /var/tmp $ java --version
-openjdk 17.0.5 2022-10-18 LTS
-OpenJDK Runtime Environment Zulu17.38+21-CA (build 17.0.5+8-LTS)
-OpenJDK 64-Bit Server VM Zulu17.38+21-CA (build 17.0.5+8-LTS, mixed mode, sharing)
+openjdk 17.0.7 2023-04-18 LTS
+OpenJDK Runtime Environment Zulu17.42+19-CA (build 17.0.7+7-LTS)
+OpenJDK 64-Bit Server VM Zulu17.42+19-CA (build 17.0.7+7-LTS, mixed mode, sharing)
 /var/tmp $
 /var/tmp $ ls -al
-total 8740
-drwxrwxrwt    1 root     root          4096 Jan 13 14:40 .
-drwxr-xr-x    1 root     root          4096 Aug  9 08:58 ..
--rw-rw-r--    1 root     root       8929063 Jan 13 14:00 bus.jar
-drwxr-xr-x    2 root     root          4096 Jan 13 14:30 data
-drwxr-xr-x    2 daemon   daemon        4096 Jan 13 14:40 log
+total 8764
+drwxrwxrwt    1 root     root          4096 Jul  7 11:37 .
+drwxr-xr-x    1 root     root          4096 Jun 14 14:30 ..
+-rw-rw-r--    1 root     root       8953463 Jul  7 11:20 bus.jar
+drwxr-xr-x    2 root     root          4096 Jul  7 11:30 data
+drwxr-xr-x    2 daemon   daemon        4096 Jul  7 11:37 log
 /var/tmp $
 /var/tmp $ ls -al data/ log/
 data/:
 total 56
-drwxr-xr-x    2 root     root          4096 Jan 13 14:30 .
-drwxrwxrwt    1 root     root          4096 Jan 13 14:40 ..
+drwxr-xr-x    2 root     root          4096 Jul  7 11:30 .
+drwxrwxrwt    1 root     root          4096 Jul  7 11:37 ..
 -rw-rw-r--    1 root     root         46218 Jan 29  2022 routes.txt
 
 log/:
 total 12
-drwxr-xr-x    2 daemon   daemon        4096 Jan 13 14:40 .
-drwxrwxrwt    1 root     root          4096 Jan 13 14:40 ..
--rw-r--r--    1 daemon   daemon          59 Jan 13 14:40 bus.log
+drwxr-xr-x    2 daemon   daemon        4096 Jul  7 11:37 .
+drwxrwxrwt    1 root     root          4096 Jul  7 11:37 ..
+-rw-r--r--    1 daemon   daemon          59 Jul  7 11:37 bus.log
 /var/tmp $
 /var/tmp $ netstat -plunt
 Active Internet connections (only servers)
@@ -207,10 +207,10 @@ The microservice has the ability to log messages to a logfile and to the Unix sy
 ```
 $ tail -f log/bus.log
 ...
-[2023-01-13][17:05:20][INFO ]  Server started on port 8765
-[2023-01-13][17:05:39][DEBUG]  from=4838 | to=524987
-[2023-01-13][17:05:43][DEBUG]  from=82 | to=35390
-[2023-01-13][17:10:17][INFO ]  Server stopped
+[2023-07-07][14:57:15][INFO ]  Server started on port 8765
+[2023-07-07][15:00:30][DEBUG]  from=4838 | to=524987
+[2023-07-07][15:00:40][DEBUG]  from=82 | to=35390
+[2023-07-07][15:00:50][INFO ]  Server stopped
 ```
 
 Messages registered by the Unix system logger can be seen and analyzed using the `journalctl` utility:
@@ -218,28 +218,28 @@ Messages registered by the Unix system logger can be seen and analyzed using the
 ```
 $ journalctl -f
 ...
-Jan 13 17:05:20 <hostname> java[<pid>]: Server started on port 8765
-Jan 13 17:05:39 <hostname> java[<pid>]: from=4838 | to=524987
-Jan 13 17:05:43 <hostname> java[<pid>]: from=82 | to=35390
-Jan 13 17:10:17 <hostname> java[<pid>]: Server stopped
+Jul 07 14:57:15 <hostname> java[<pid>]: Server started on port 8765
+Jul 07 15:00:30 <hostname> java[<pid>]: from=4838 | to=524987
+Jul 07 15:00:40 <hostname> java[<pid>]: from=82 | to=35390
+Jul 07 15:00:50 <hostname> java[<pid>]: Server stopped
 ```
 
 Inside the running container logs might be queried also by `tail`ing the `log/bus.log` logfile:
 
 ```
 /var/tmp $ tail -f log/bus.log
-[2023-01-13][14:40:16][INFO ]  Server started on port 8765
-[2023-01-13][14:50:28][DEBUG]  from=4838 | to=524987
-[2023-01-13][14:50:32][DEBUG]  from=82 | to=35390
+[2023-07-07][11:37:15][INFO ]  Server started on port 8765
+[2023-07-07][11:40:10][DEBUG]  from=4838 | to=524987
+[2023-07-07][11:40:20][DEBUG]  from=82 | to=35390
 ```
 
 And of course Docker itself gives the possibility to read log messages by using the corresponding command for that:
 
 ```
 $ sudo docker logs -f busclj
-[2023-01-13][14:40:16][INFO ]  Server started on port 8765
-[2023-01-13][14:50:28][DEBUG]  from=4838 | to=524987
-[2023-01-13][14:50:32][DEBUG]  from=82 | to=35390
+[2023-07-07][11:37:15][INFO ]  Server started on port 8765
+[2023-07-07][11:40:10][DEBUG]  from=4838 | to=524987
+[2023-07-07][11:40:20][DEBUG]  from=82 | to=35390
 ```
 
 ### Error handling
