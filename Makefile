@@ -22,14 +22,14 @@ MV      = mv
 MVFLAGS = -v
 ECHO    = @echo
 
-# Making the first target (the microservice itself).
+# Making the first target (JVM classes).
 $(SERV):
 	$(LEIN) compile :all
 
 # Making the second target (runnable JAR file).
 $(JAR):
 	$(LEIN) $(UBERJAR)
-	$(MV) $(MVFLAGS) $(SERV)/$(UBERJAR)/bus-$(VERSION).$(JAR)            \
+	$(MV) $(MVFLAGS) $(SERV)/$(UBERJAR)/bus-$(VERSION).$(JAR) \
 	      $(SERV)/$(UBERJAR)/bus-$(VERSION).$(JAR).original
 	$(MV) $(MVFLAGS) $(SERV)/$(UBERJAR)/bus-$(VERSION)-standalone.$(JAR) \
 	      $(SERV)/$(UBERJAR)/bus-$(VERSION).$(JAR)
