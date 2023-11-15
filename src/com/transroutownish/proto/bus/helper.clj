@@ -77,7 +77,7 @@
     "Retrieves the port number used to run the server, from daemon settings.
 
     Args:
-        The vector containing maps of individual settings.
+        A vector containing maps of individual settings.
 
     Returns:
         The port number on which the server has to be run.
@@ -105,7 +105,7 @@
     from daemon settings.
 
     Args:
-        The vector containing maps of individual settings.
+        A vector containing maps of individual settings.
 
     Returns:
         The path and filename of the routes data store
@@ -132,7 +132,7 @@
     the corresponding value from daemon settings.
 
     Args:
-        The vector containing maps of individual settings.
+        A vector containing maps of individual settings.
 
     Returns:
         `true` if debug logging is enabled, `false` otherwise.
